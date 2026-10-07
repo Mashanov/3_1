@@ -2065,6 +2065,8 @@ function setupInput() {
     if (currentScreen !== 'game' || !game) return;
     const canvas = document.getElementById('game-canvas');
     if (!canvas) return;
+    // Игнорируем касания по оверлеям и кнопкам — пусть сработает обычный click
+    if (e.target !== canvas) return;
     const t = e.touches[0];
     const rect = canvas.getBoundingClientRect();
     if (t.clientX < rect.left || t.clientX > rect.right || t.clientY < rect.top || t.clientY > rect.bottom) return;
