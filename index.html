@@ -178,8 +178,7 @@ let musicWasPlaying = false;
 if (typeof vkBridge !== 'undefined') {
   vkBridge.subscribe((e) => {
     if (e.detail && e.detail.type === 'VKWebAppViewHide') {
-      musicWasPlaying = musicPlaying;
-      if (musicPlaying) stopMusic();
+      if (musicPlaying) { musicWasPlaying = true; stopMusic(); }
     }
     if (e.detail && e.detail.type === 'VKWebAppViewRestore') {
       if (musicWasPlaying && G.musicOn) {
@@ -192,8 +191,7 @@ if (typeof vkBridge !== 'undefined') {
 
 // PC: pause music when tab/window loses focus, resume when focus returns
 self.addEventListener('blur', () => {
-  musicWasPlaying = musicPlaying;
-  if (musicPlaying) stopMusic();
+  if (musicPlaying) { musicWasPlaying = true; stopMusic(); }
 });
 
 self.addEventListener('focus', () => {
@@ -206,8 +204,7 @@ self.addEventListener('focus', () => {
 // Fallback: visibilitychange (covers tab switch in some browsers where blur is unreliable)
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
-    musicWasPlaying = musicPlaying;
-    if (musicPlaying) stopMusic();
+    if (musicPlaying) { musicWasPlaying = true; stopMusic(); }
   } else {
     if (musicWasPlaying && G.musicOn) {
       musicWasPlaying = false;
@@ -1516,9 +1513,10 @@ function onLevelWin(level, score) {
     `;
     screen.appendChild(overlay);
     
+    let rewardClaimed = false;
     document.getElementById('next-btn').onclick = () => {
       overlay.remove();
-      G.coins += reward;
+      if (!rewardClaimed) { G.coins += reward; rewardClaimed = true; }
       saveData();
       stopGameLoop();
       if (level < 500) startLevel(level+1);
@@ -1526,7 +1524,7 @@ function onLevelWin(level, score) {
     };
     document.getElementById('menu-btn').onclick = () => {
       overlay.remove();
-      G.coins += reward;
+      if (!rewardClaimed) { G.coins += reward; rewardClaimed = true; }
       saveData();
       stopGameLoop();
       buildLobby();
@@ -1536,9 +1534,10 @@ function onLevelWin(level, score) {
       showToast(t('adLoading'), 1500);
       showRewardedAd(() => {
         G.coins += reward * 2;
+        rewardClaimed = true;
         saveData();
         showToast(`+${reward*2} ${t('coins')}!`, 2000);
-        overlay.remove();
+        document.getElementById('double-btn').remove();
       }, () => {
         showToast(t('adError'), 1500);
       });
