@@ -1208,8 +1208,12 @@ let gameLoopId = null;
 let lastTime = 0;
 
 function showScreen(name) {
+  // Пересобираем экран уровней при каждом показе,
+  // чтобы он всегда отражал актуальный G.unlockedLevel
+  if (name === 'levels') buildLevels();
+
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const screen = document.getElementById(name+'-screen');
+  const screen = document.getElementById(name + '-screen');
   if (screen) screen.classList.add('active');
   currentScreen = name;
   hideBanner();
