@@ -8,7 +8,7 @@
 <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; user-select:none; -webkit-tap-highlight-color:transparent; }
-html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-family:'Segoe UI',Arial,sans-serif; touch-action:none; }
+html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-family:'Segoe UI',Arial,sans-serif; touch-action:manipulation; }
 #game-container {
   position:relative; width:100%; height:100%;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -19,14 +19,21 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
     linear-gradient(135deg,#0a0a2a 0%,#1a0a3a 50%,#0a1a3a 100%);
   overflow:hidden;
 }
-.screen { position:absolute; top:0; left:0; width:100%; height:100%; display:none; flex-direction:column; align-items:center; justify-content:center; z-index:10; overflow:hidden; }
+.screen {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  display:none; flex-direction:column; align-items:center;
+  justify-content:center;
+  justify-content:safe center;
+  overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  z-index:10;
+}
 .screen.active { display:flex; }
 
 /* ============ ANIMATIONS ============ */
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 @keyframes scaleIn { from{transform:scale(0.5);opacity:0} to{transform:scale(1);opacity:1} }
 @keyframes floatUp { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-@keyframes glow { 0%{filter:drop-shadow(0 0 5px rgba(100,200,255,.8))} 50%{filter:drop-shadow(0 0 20px rgba(100,200,255,1))} 100%{filter:drop-shadow(0 0 5px rgba(100,200,255,.8))} }
 @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
 @keyframes popIn { 0%{transform:scale(0) rotate(-180deg);opacity:0} 70%{transform:scale(1.2) rotate(10deg)} 100%{transform:scale(1) rotate(0);opacity:1} }
 @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
@@ -38,12 +45,12 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   50% { transform: translateY(-40px) rotate(180deg) scale(1.25); opacity:.5; }
 }
 @keyframes bgPulse { 0%,100%{opacity:.5} 50%{opacity:1} }
-@keyframes rotateSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 @keyframes starTwinkle { 0%,100%{opacity:.4;transform:scale(1)} 50%{opacity:1;transform:scale(1.2)} }
+@keyframes slideDown { from{transform:translate(-50%,-50px);opacity:0} to{transform:translate(-50%,0);opacity:1} }
 
 /* ============ CRYSTAL BACKGROUND ============ */
 .crystal-bg {
-  position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0;
+  position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:0;
 }
 .crystal-bg::before {
   content:'';
@@ -58,27 +65,24 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   position:absolute; pointer-events:none;
   animation: floatCrystal 8s ease-in-out infinite;
   filter: drop-shadow(0 0 8px currentColor);
-  z-index:0;
 }
 .bg-sparkle {
-  position:absolute; pointer-events:none; z-index:0;
+  position:absolute; pointer-events:none;
   animation: starTwinkle 3s ease-in-out infinite;
   font-size:12px;
 }
 
 /* ============ TITLE ============ */
 .game-title {
-  font-size:clamp(28px, 8vw, 44px);
-  font-weight:900;
-  letter-spacing:1px;
+  font-size:clamp(28px, 7vw, 44px);
+  font-weight:900; letter-spacing:1px;
   background:linear-gradient(135deg, #4facfe 0%, #00f2fe 20%, #f093fb 50%, #f5576c 75%, #ffd700 100%);
   background-size:200% auto;
   -webkit-background-clip:text; background-clip:text;
   -webkit-text-fill-color:transparent; color:transparent;
   animation: titleShine 4s linear infinite, titleFloat 4s ease-in-out infinite;
   filter: drop-shadow(0 0 25px rgba(79,172,254,.55)) drop-shadow(0 0 10px rgba(240,147,251,.4));
-  text-align:center;
-  padding:0 10px;
+  text-align:center; padding:0 10px;
 }
 
 /* ============ BUTTONS ============ */
@@ -100,11 +104,11 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   background:linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
   animation: shimmer 3.5s infinite;
 }
-.btn-primary { background:linear-gradient(135deg,#667eea,#764ba2); box-shadow:0 4px 15px rgba(102,126,234,.5), inset 0 1px 0 rgba(255,255,255,.25); }
-.btn-success { background:linear-gradient(135deg,#11998e,#38ef7d); box-shadow:0 4px 15px rgba(56,239,125,.4), inset 0 1px 0 rgba(255,255,255,.25); }
-.btn-danger  { background:linear-gradient(135deg,#e74c3c,#c0392b); box-shadow:0 4px 15px rgba(231,76,60,.4), inset 0 1px 0 rgba(255,255,255,.25); }
-.btn-warning { background:linear-gradient(135deg,#f7971e,#ffd200); color:#3a2a00; box-shadow:0 4px 15px rgba(255,210,0,.4), inset 0 1px 0 rgba(255,255,255,.4); }
-.btn-secondary { background:linear-gradient(135deg,#2c3e50,#3498db); box-shadow:0 4px 15px rgba(52,152,219,.3), inset 0 1px 0 rgba(255,255,255,.2); }
+.btn-primary { background:linear-gradient(135deg,#667eea,#764ba2); }
+.btn-success { background:linear-gradient(135deg,#11998e,#38ef7d); }
+.btn-danger  { background:linear-gradient(135deg,#e74c3c,#c0392b); }
+.btn-warning { background:linear-gradient(135deg,#f7971e,#ffd200); color:#3a2a00; }
+.btn-secondary { background:linear-gradient(135deg,#2c3e50,#3498db); }
 .btn-back {
   background:linear-gradient(135deg, rgba(40,40,70,.9), rgba(30,30,60,.9));
   border:1px solid rgba(100,150,255,.35);
@@ -134,19 +138,19 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 }
 
 /* ============ LOBBY ============ */
-#lobby-screen { overflow:hidden; }
+#lobby-screen { overflow-y:auto; overflow-x:hidden; }
 .lobby-content {
   position:relative; z-index:2;
-  width:100%; height:100%;
+  width:100%; min-height:100%;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  padding:20px 14px; gap:14px;
+  padding:24px 14px; gap:14px;
 }
 .title-wrap {
   display:flex; align-items:center; justify-content:center; gap:12px;
   margin-bottom:4px;
 }
 .title-crystal {
-  font-size:26px;
+  font-size:clamp(18px, 5vw, 30px);
   background:linear-gradient(135deg,#4facfe,#f093fb);
   -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
   animation: floatUp 3s ease-in-out infinite;
@@ -173,62 +177,6 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 .stat-pill.fire { border-color:rgba(255,120,60,.5); }
 .stat-pill.fire .stat-value { color:#ff9d5c; }
 
-.lobby-grid {
-  display:grid; grid-template-columns:repeat(2,1fr); gap:12px;
-  max-width:440px; width:100%;
-}
-.lobby-btn {
-  position:relative;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:8px; padding:18px 10px; min-height:110px;
-  border-radius:18px; cursor:pointer;
-  transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s;
-  overflow:hidden;
-  box-shadow: 0 6px 18px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.25), inset 0 -20px 30px rgba(0,0,0,.2);
-  border:1px solid rgba(255,255,255,.12);
-}
-.lobby-btn::before {
-  content:''; position:absolute; inset:0; border-radius:18px;
-  background: linear-gradient(180deg, rgba(255,255,255,.15), transparent 45%);
-  pointer-events:none;
-}
-.lobby-btn::after {
-  content:''; position:absolute; top:0; left:-100%; width:60%; height:100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
-  transform: skewX(-20deg);
-  animation: shimmer 4s infinite;
-  pointer-events:none;
-}
-.lobby-btn:active { transform:scale(.93); }
-.lobby-btn .lobby-icon {
-  width:44px; height:44px;
-  display:flex; align-items:center; justify-content:center;
-  filter: drop-shadow(0 3px 6px rgba(0,0,0,.4)) drop-shadow(0 0 8px rgba(255,255,255,.15));
-}
-.lobby-btn .lobby-icon svg { width:100%; height:100%; }
-.lobby-btn .lobby-label {
-  font-size:13px; font-weight:900; color:#fff; letter-spacing:.5px;
-  text-shadow: 0 2px 4px rgba(0,0,0,.5), 0 0 12px rgba(255,255,255,.15);
-  text-transform: uppercase;
-}
-.lobby-badge {
-  position:absolute; top:8px; right:8px;
-  min-width:18px; height:18px; padding:0 5px;
-  background: linear-gradient(135deg,#ff4b4b,#e63946);
-  border-radius:9px; display:flex; align-items:center; justify-content:center;
-  font-size:10px; font-weight:900; color:#fff;
-  box-shadow: 0 2px 8px rgba(255,75,75,.6), 0 0 0 2px rgba(255,255,255,.15);
-  animation: pulse 1.5s infinite;
-}
-.lobby-footer {
-  margin-top:8px; display:flex; align-items:center; gap:10px;
-  color:rgba(150,180,220,.4); font-size:11px; letter-spacing:2px; font-weight:700;
-}
-.lobby-footer::before, .lobby-footer::after {
-  content:''; width:40px; height:1px;
-  background: linear-gradient(90deg, transparent, rgba(150,180,220,.4), transparent);
-}
-
 .progress-wrap {
   width:100%; max-width:440px;
   background: rgba(15,15,40,.7);
@@ -246,15 +194,96 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   box-shadow: 0 0 10px rgba(79,172,254,.6);
 }
 
+.lobby-actions {
+  width:100%; max-width:440px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.play-main-btn {
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  padding:18px 24px; min-height:76px;
+  border-radius:20px; cursor:pointer;
+  background:linear-gradient(135deg,#667eea 0%,#764ba2 40%,#f093fb 100%);
+  box-shadow: 0 8px 24px rgba(102,126,234,.6), inset 0 1px 0 rgba(255,255,255,.3), inset 0 -20px 30px rgba(0,0,0,.2);
+  border:1px solid rgba(255,255,255,.2);
+  position:relative; overflow:hidden;
+  transition:transform .15s;
+}
+.play-main-btn::after {
+  content:''; position:absolute; top:0; left:-100%; width:60%; height:100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: skewX(-20deg);
+  animation: shimmer 3s infinite;
+  pointer-events:none;
+}
+.play-main-btn:active { transform:scale(.96); }
+.play-main-btn .play-icon { width:36px; height:36px; }
+.play-main-btn .play-icon svg { width:100%; height:100%; filter: drop-shadow(0 2px 6px rgba(0,0,0,.4)); }
+.play-main-btn .play-text {
+  font-size:22px; font-weight:900; color:#fff;
+  text-transform:uppercase; letter-spacing:2px;
+  text-shadow: 0 2px 8px rgba(0,0,0,.5);
+}
+
+.lobby-grid {
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;
+  width:100%;
+}
+@media (max-width: 380px) {
+  .lobby-grid { grid-template-columns:repeat(2, 1fr); }
+}
+.lobby-btn {
+  position:relative;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:8px; padding:16px 8px; min-height:100px;
+  border-radius:16px; cursor:pointer;
+  transition: transform .18s cubic-bezier(.34,1.56,.64,1);
+  overflow:hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.25), inset 0 -20px 30px rgba(0,0,0,.2);
+  border:1px solid rgba(255,255,255,.12);
+}
+.lobby-btn::before {
+  content:''; position:absolute; inset:0; border-radius:16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.15), transparent 45%);
+  pointer-events:none;
+}
+.lobby-btn::after {
+  content:''; position:absolute; top:0; left:-100%; width:60%; height:100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+  transform: skewX(-20deg);
+  animation: shimmer 4s infinite;
+  pointer-events:none;
+}
+.lobby-btn:active { transform:scale(.93); }
+.lobby-btn .lobby-icon {
+  width:38px; height:38px;
+  display:flex; align-items:center; justify-content:center;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,.4));
+}
+.lobby-btn .lobby-icon svg { width:100%; height:100%; }
+.lobby-btn .lobby-label {
+  font-size:11px; font-weight:900; color:#fff; letter-spacing:.5px;
+  text-shadow: 0 2px 4px rgba(0,0,0,.5);
+  text-transform: uppercase; text-align:center;
+}
+.lobby-badge {
+  position:absolute; top:8px; right:8px;
+  min-width:18px; height:18px; padding:0 5px;
+  background: linear-gradient(135deg,#ff4b4b,#e63946);
+  border-radius:9px; display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:900; color:#fff;
+  box-shadow: 0 2px 8px rgba(255,75,75,.6), 0 0 0 2px rgba(255,255,255,.15);
+  animation: pulse 1.5s infinite;
+}
+
 /* ============ LEVELS ============ */
 .level-grid-container {
-  max-width:500px; width:95%; max-height:70vh; overflow-y:auto; padding:10px;
+  max-width:500px; width:95%; max-height:65vh; overflow-y:auto; padding:10px;
   scrollbar-width:thin; scrollbar-color:rgba(100,150,255,.4) rgba(30,30,70,.3);
 }
 .level-grid-container::-webkit-scrollbar { width:6px; }
 .level-grid-container::-webkit-scrollbar-track { background:rgba(30,30,70,.3); border-radius:3px; }
 .level-grid-container::-webkit-scrollbar-thumb { background:rgba(100,150,255,.4); border-radius:3px; }
-.level-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+.level-grid { display:grid; grid-template-columns:repeat(5, 1fr); gap:10px; }
 .level-card {
   aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
   border-radius:12px; cursor:pointer; transition:transform .15s; font-weight:800; position:relative;
@@ -276,8 +305,8 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 }
 .level-card:active { transform:scale(.9); }
 
-/* ============ GAME SCREEN ============ */
-#game-screen { flex-direction:column; overflow:hidden; }
+/* ============ GAME ============ */
+#game-screen { flex-direction:column; overflow-y:auto; overflow-x:hidden; padding:10px 0 15px; }
 #game-screen * { scrollbar-width:none; }
 #game-screen *::-webkit-scrollbar { display:none; }
 #game-canvas {
@@ -286,7 +315,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
     0 0 40px rgba(100,150,255,.4),
     0 0 0 2px rgba(100,150,255,.3),
     inset 0 0 40px rgba(79,172,254,.1);
-  margin:8px 0;
+  margin:8px 0; max-width:96vw; max-height:70vh;
 }
 .game-top-bar {
   width:95%; max-width:500px;
@@ -309,7 +338,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   border:2px solid rgba(100,150,255,.35);
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   cursor:pointer; position:relative;
-  transition:transform .15s, box-shadow .15s;
+  transition:transform .15s;
   box-shadow: 0 4px 12px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12);
 }
 .power-up-slot:active { transform:scale(.9); }
@@ -326,8 +355,8 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   position:absolute; inset:0;
   background: radial-gradient(circle at center, rgba(20,10,40,.8), rgba(0,0,0,.9));
   display:flex; align-items:center; justify-content:center; z-index:50;
-  animation: fadeIn .3s;
-  backdrop-filter: blur(6px);
+  animation: fadeIn .3s; backdrop-filter: blur(6px);
+  padding:20px;
 }
 .overlay-content { animation: scaleIn .35s cubic-bezier(.34,1.56,.64,1); text-align:center; max-width:90%; }
 .star-rating { display:flex; gap:10px; justify-content:center; margin:20px 0; }
@@ -337,7 +366,8 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 /* ============ SETTINGS ============ */
 .settings-row {
   display:flex; justify-content:space-between; align-items:center;
-  padding:14px 0; border-bottom:1px solid rgba(100,150,255,.15); width:100%;
+  padding:14px 0; border-bottom:1px solid rgba(100,150,255,.15); width:100%; gap:12px;
+  flex-wrap:wrap;
 }
 .settings-row:last-child { border:none; }
 .settings-label { color:#aaddff; font-size:15px; font-weight:700; letter-spacing:.3px; }
@@ -345,7 +375,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   width:54px; height:30px; background: rgba(60,60,80,.6);
   border-radius:15px; cursor:pointer; position:relative; transition:background .3s;
   border:1px solid rgba(100,150,255,.2);
-  box-shadow: inset 0 2px 6px rgba(0,0,0,.4);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.4); flex-shrink:0;
 }
 .toggle-switch.on {
   background: linear-gradient(135deg,#38ef7d,#11998e);
@@ -354,8 +384,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 .toggle-switch .knob {
   position:absolute; top:3px; left:3px; width:24px; height:24px;
   background: linear-gradient(180deg,#fff,#dde); border-radius:50%;
-  transition:left .3s;
-  box-shadow: 0 2px 6px rgba(0,0,0,.4);
+  transition:left .3s; box-shadow: 0 2px 6px rgba(0,0,0,.4);
 }
 .toggle-switch.on .knob { left:27px; }
 .lang-btn {
@@ -376,14 +405,14 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   box-shadow: inset 0 2px 6px rgba(0,0,0,.3);
   outline: none; transition: border .2s;
 }
-.promo-input:focus { border-color:#4facfe; box-shadow: inset 0 2px 6px rgba(0,0,0,.3), 0 0 0 3px rgba(79,172,254,.2); }
+.promo-input:focus { border-color:#4facfe; }
 
 /* ============ QUESTS ============ */
 .quest-card {
   background: linear-gradient(135deg, rgba(30,30,70,.75), rgba(18,18,42,.85));
   border:1px solid rgba(100,150,255,.25);
   border-radius:14px; padding:14px; margin-bottom:10px;
-  display:flex; justify-content:space-between; align-items:center;
+  display:flex; justify-content:space-between; align-items:center; gap:10px;
   box-shadow: 0 4px 12px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.08);
   position: relative; overflow: hidden;
 }
@@ -391,8 +420,8 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
   background: linear-gradient(180deg,#4facfe,#f093fb);
 }
-.quest-info { flex:1; }
-.quest-title { color:#fff; font-weight:800; font-size:14px; }
+.quest-info { flex:1; min-width:0; }
+.quest-title { color:#fff; font-weight:800; font-size:14px; word-break:break-word; }
 .quest-progress { color:#8899bb; font-size:12px; margin-top:4px; font-weight:600; }
 .quest-reward { display:flex; align-items:center; gap:4px; color:#ffd700; font-weight:800; font-size:14px; }
 .quest-claim-btn {
@@ -400,12 +429,12 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   color:#fff; border:none; padding:8px 16px; border-radius:10px;
   cursor:pointer; font-weight:800; font-size:12px; letter-spacing:.5px;
   box-shadow: 0 3px 10px rgba(56,239,125,.4), inset 0 1px 0 rgba(255,255,255,.25);
-  transition: transform .15s;
+  transition: transform .15s; white-space:nowrap;
 }
 .quest-claim-btn:active { transform: scale(.93); }
 .quest-claim-btn:disabled { opacity:.35; cursor:not-allowed; box-shadow:none; }
 .quest-scroll-wrap {
-  max-height:65vh; overflow-y:auto; padding:10px 5px;
+  max-height:58vh; overflow-y:auto; padding:10px 5px;
   scrollbar-width:thin; scrollbar-color:rgba(100,150,255,.4) rgba(30,30,70,.3);
 }
 .quest-scroll-wrap::-webkit-scrollbar { width:6px; }
@@ -413,7 +442,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 .quest-scroll-wrap::-webkit-scrollbar-thumb { background:rgba(100,150,255,.4); border-radius:3px; }
 
 /* ============ SHOP ============ */
-.shop-scroll-wrap { width:95%; max-width:460px; max-height:62vh; overflow-y:auto; padding:10px 5px; }
+.shop-scroll-wrap { width:95%; max-width:460px; max-height:60vh; overflow-y:auto; padding:10px 5px; }
 .shop-scroll-wrap::-webkit-scrollbar { width:6px; }
 .shop-scroll-wrap::-webkit-scrollbar-track { background:rgba(30,30,70,.3); border-radius:3px; }
 .shop-scroll-wrap::-webkit-scrollbar-thumb { background:rgba(100,150,255,.4); border-radius:3px; }
@@ -435,7 +464,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 .shop-card .name { color:#aaddff; font-weight:800; font-size:13px; letter-spacing:.3px; }
 .shop-card .desc { color:#8899bb; font-size:11px; line-height:1.3; }
 .shop-card .owned { color:#ffd700; font-size:12px; font-weight:800; }
-.shop-card .price { display:flex; align-items:center; gap:4px; color:#ffd700; font-weight:900; font-size:16px; text-shadow: 0 0 8px rgba(255,215,0,.4); }
+.shop-card .price { display:flex; align-items:center; gap:4px; color:#ffd700; font-weight:900; font-size:16px; }
 .buy-btn {
   background: linear-gradient(135deg,#667eea,#764ba2);
   color:#fff; border:none; padding:9px 20px; border-radius:11px;
@@ -447,10 +476,10 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 .buy-btn:disabled { opacity:.4; cursor:not-allowed; box-shadow:none; }
 
 /* ============ DAILY ============ */
-.daily-grid { display:flex; flex-direction:column; gap:10px; max-width:400px; width:90%; }
+.daily-grid { display:flex; flex-direction:column; gap:10px; max-width:400px; width:100%; }
 .daily-row {
   display:flex; align-items:center; justify-content:space-between;
-  padding:14px; border-radius:14px;
+  padding:14px; border-radius:14px; gap:10px;
   background: linear-gradient(135deg, rgba(35,35,80,.6), rgba(18,18,42,.8));
   border:1px solid rgba(100,150,255,.2);
   box-shadow: 0 3px 10px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.06);
@@ -458,8 +487,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 }
 .daily-row.claimed { opacity:.4; }
 .daily-row.available {
-  border-color:#38ef7d;
-  animation: pulse 2s infinite;
+  border-color:#38ef7d; animation: pulse 2s infinite;
   box-shadow: 0 0 20px rgba(56,239,125,.4), inset 0 1px 0 rgba(255,255,255,.1);
 }
 
@@ -477,12 +505,9 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   color:#fff; padding:14px 28px; border-radius:14px; z-index:200;
   animation: slideDown .3s; border:1px solid rgba(100,150,255,.4);
   font-weight:800; box-shadow: 0 8px 24px rgba(0,0,0,.6), 0 0 30px rgba(100,150,255,.3);
-  letter-spacing:.5px;
+  letter-spacing:.5px; max-width:90vw; text-align:center;
 }
-@keyframes slideDown { from{transform:translate(-50%,-50px);opacity:0} to{transform:translate(-50%,0);opacity:1} }
 
-/* Tutorial */
-.tut-highlight { position:absolute; border:3px solid #ffd700; border-radius:12px; pointer-events:none; z-index:40; animation:pulse 1s infinite; }
 .tut-text {
   position:absolute; background: rgba(0,0,0,.92); color:#fff; padding:14px 20px;
   border-radius:14px; font-size:15px; z-index:41; max-width:280px; text-align:center;
@@ -490,18 +515,111 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   box-shadow: 0 8px 24px rgba(0,0,0,.7);
 }
 
-/* Responsive tweaks */
-@media (max-height: 700px) {
-  .lobby-btn { min-height: 90px; padding:14px 8px; }
-  .lobby-btn .lobby-icon { width:36px; height:36px; }
-  .game-title { font-size: clamp(24px, 7vw, 36px); }
+/* ============ RESPONSIVE: TABLET ============ */
+@media (min-width: 600px) {
+  .lobby-actions { max-width: 560px; }
+  .progress-wrap { max-width: 560px; }
+  .game-title { font-size: 48px; }
+  .level-grid { grid-template-columns: repeat(6, 1fr); }
+  .level-grid-container { max-width: 640px; max-height: 68vh; }
+  .game-top-bar { max-width: 620px; }
+  .game-info-box { padding: 8px 16px; min-width: 85px; }
+  .game-info-box .value { font-size: 20px; }
+  .shop-scroll-wrap { max-width: 600px; }
+  .lobby-btn .lobby-icon { width: 46px; height: 46px; }
+  .lobby-btn .lobby-label { font-size: 12px; }
+  .lobby-btn { min-height: 110px; }
+}
+
+/* ============ RESPONSIVE: DESKTOP ============ */
+@media (min-width: 900px) {
+  .lobby-actions { max-width: 720px; }
+  .progress-wrap { max-width: 720px; }
+  .game-title { font-size: 56px; letter-spacing:2px; }
+  .title-crystal { font-size: 32px; }
+  .play-main-btn { min-height: 92px; padding: 22px 32px; }
+  .play-main-btn .play-text { font-size: 28px; letter-spacing: 3px; }
+  .play-main-btn .play-icon { width: 44px; height: 44px; }
+  .lobby-btn { min-height: 130px; padding: 20px 12px; gap: 10px; }
+  .lobby-btn .lobby-icon { width: 54px; height: 54px; }
+  .lobby-btn .lobby-label { font-size: 14px; letter-spacing: 1px; }
+  .stats-bar { gap: 12px; }
+  .stat-pill { padding: 10px 20px; }
+  .stat-pill .stat-value { font-size: 16px; }
+  .stat-pill .stat-icon { font-size: 18px; }
+
+  .panel { max-width: 640px; padding: 28px; }
+  .settings-label { font-size: 17px; }
+  .lang-btn { font-size: 14px; padding: 10px 22px; }
+  .promo-input { font-size: 16px; padding: 14px; }
+  .btn { font-size: 20px; padding: 16px 34px; }
+
+  .level-grid { grid-template-columns: repeat(8, 1fr); gap: 12px; }
+  .level-grid-container { max-width: 780px; max-height: 72vh; }
+  .level-card { font-size: 15px; }
+
+  .quest-scroll-wrap { max-height: 62vh; }
+  .quest-title { font-size: 15px; }
+  .quest-progress { font-size: 13px; }
+  .quest-claim-btn { font-size: 13px; padding: 10px 20px; }
+  .quest-reward { font-size: 15px; }
+
+  .shop-scroll-wrap { max-width: 780px; max-height: 65vh; }
+  .shop-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .shop-card { padding: 18px; }
+  .shop-card svg { width: 52px; height: 52px; }
+  .shop-card .name { font-size: 15px; }
+  .shop-card .desc { font-size: 12px; }
+  .shop-card .price { font-size: 18px; }
+  .buy-btn { font-size: 14px; padding: 12px 24px; }
+
+  .daily-grid { max-width: 500px; }
+  .daily-row { padding: 16px; }
+  .daily-row > span:first-child { font-size: 16px; }
+
+  .game-top-bar { max-width: 720px; }
+  .game-info-box { padding: 10px 20px; min-width: 100px; }
+  .game-info-box .value { font-size: 22px; }
+  .game-info-box .label { font-size: 11px; }
+  .power-up-slot { width: 64px; height: 64px; border-radius: 16px; }
+  .power-up-slot svg { width: 38px; height: 38px; }
+  .power-up-count { font-size: 11px; padding: 2px 7px; }
+
+  #game-canvas { border-radius: 20px; }
+}
+
+/* ============ RESPONSIVE: LARGE DESKTOP ============ */
+@media (min-width: 1200px) {
+  .lobby-actions { max-width: 840px; }
+  .progress-wrap { max-width: 840px; }
+  .game-title { font-size: 64px; }
+  .play-main-btn { min-height: 100px; }
+  .play-main-btn .play-text { font-size: 32px; }
+  .lobby-btn { min-height: 140px; }
+  .lobby-btn .lobby-icon { width: 60px; height: 60px; }
+
+  .level-grid { grid-template-columns: repeat(10, 1fr); }
+  .level-grid-container { max-width: 920px; }
+
+  .game-top-bar { max-width: 820px; }
+
+  .shop-scroll-wrap { max-width: 900px; }
+  .panel { max-width: 720px; }
+}
+
+/* ============ SMALL HEIGHT FIX ============ */
+@media (max-height: 640px) and (orientation: landscape) {
+  .game-title { font-size: clamp(22px, 5vw, 32px); }
+  .lobby-content { padding: 12px; gap: 8px; }
+  .play-main-btn { min-height: 58px; padding: 12px 18px; }
+  .play-main-btn .play-text { font-size: 18px; }
+  .lobby-btn { min-height: 80px; padding: 10px 6px; }
+  .stats-bar { margin-bottom: 0; }
 }
 </style>
 </head>
 <body>
-<div id="game-container">
-<!-- Screens will be managed by JS -->
-</div>
+<div id="game-container"></div>
 <div id="banner-container"></div>
 
 <script>
@@ -514,16 +632,12 @@ try {
 } catch(e) { vkAvailable = false; }
 
 function showInviteBox() {
-  if (vkAvailable) {
-    vkBridge.send("VKWebAppShowInviteBox").then(() => {}).catch(() => {});
-  } else {
-    showToast(t('invite'));
-  }
+  if (vkAvailable) vkBridge.send("VKWebAppShowInviteBox").then(()=>{}).catch(()=>{});
+  else showToast(t('invite'));
 }
 
 // ==================== VIEW HIDE/RESTORE ====================
 let musicWasPlaying = false;
-
 if (typeof vkBridge !== 'undefined') {
   vkBridge.subscribe((e) => {
     if (e.detail && e.detail.type === 'VKWebAppViewHide') {
@@ -534,17 +648,11 @@ if (typeof vkBridge !== 'undefined') {
     }
   });
 }
-
 self.addEventListener('blur', () => { if (musicPlaying) { musicWasPlaying = true; stopMusic(); } });
-self.addEventListener('focus', () => {
-  if (musicWasPlaying && G.musicOn) { musicWasPlaying = false; playMusic(); }
-});
+self.addEventListener('focus', () => { if (musicWasPlaying && G.musicOn) { musicWasPlaying = false; playMusic(); } });
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    if (musicPlaying) { musicWasPlaying = true; stopMusic(); }
-  } else {
-    if (musicWasPlaying && G.musicOn) { musicWasPlaying = false; playMusic(); }
-  }
+  if (document.hidden) { if (musicPlaying) { musicWasPlaying = true; stopMusic(); } }
+  else { if (musicWasPlaying && G.musicOn) { musicWasPlaying = false; playMusic(); } }
 });
 
 // ==================== TRANSLATIONS ====================
@@ -566,13 +674,13 @@ const I18N = {
     hammerDesc:"Уничтожает один кристалл", coins:"монет",
     questRefresh:"Задания обновятся через", hours:"ч", min:"м",
     noQuests:"Все задания выполнены!", levelLocked:"Уровень закрыт!",
-    doubleReward:"Удвоить награду?", watchAd:"Удвоить за рекламу", noThanks:"Нет, спасибо", adDoubleHint:"Награда x2 за просмотр",
+    doubleReward:"Удвоить награду?", watchAd:"Удвоить за рекламу", noThanks:"Нет, спасибо",
     adLoading:"Загрузка рекламы...", adError:"Реклама недоступна",
     clearConfirm:"Вы уверены? Все данные будут удалены!",
-    promoSuccess:"Промокод активирован!", promoFail:"Неверный промокод",
+    promoSuccess:"Промокод активирован! Данные сброшены.", promoFail:"Неверный промокод",
     progressSaved:"Прогресс сохранён", modes:"Режим", classic:"Классика", timed:"На время",
     movesLimit:"Ограничение ходов", obstacles:"Препятствия", blind:"Вслепую", invite:"Друзья",
-    progress:"Прогресс", stats:"Статистика"
+    progress:"Прогресс", stats:"Статистика", dayStreak:"Серия"
   },
   en: {
     title:"Crystal Match", play:"Play", settings:"Settings", quests:"Quests", afk:"AFK",
@@ -591,39 +699,30 @@ const I18N = {
     hammerDesc:"Destroys one crystal", coins:"coins",
     questRefresh:"Quests refresh in", hours:"h", min:"m",
     noQuests:"All quests completed!", levelLocked:"Level locked!",
-    doubleReward:"Double reward?", watchAd:"Double via Ad", noThanks:"No, thanks", adDoubleHint:"x2 reward for watching",
+    doubleReward:"Double reward?", watchAd:"Double via Ad", noThanks:"No, thanks",
     adLoading:"Loading ad...", adError:"Ad unavailable",
     clearConfirm:"Are you sure? All data will be deleted!",
-    promoSuccess:"Promo activated!", promoFail:"Invalid promo code",
+    promoSuccess:"Promo activated! Data reset.", promoFail:"Invalid promo code",
     progressSaved:"Progress saved", modes:"Mode", classic:"Classic", timed:"Timed",
     movesLimit:"Move Limit", obstacles:"Obstacles", blind:"Blind", invite:"Friends",
-    progress:"Progress", stats:"Statistics"
+    progress:"Progress", stats:"Statistics", dayStreak:"Streak"
   }
 };
 
 // ==================== GAME STATE ====================
 let G = {
-  lang:'ru',
-  coins:100,
-  currentLevel:1,
-  unlockedLevel:1,
-  musicOn:true,
-  tutorialDone:false,
+  lang:'ru', coins:100, currentLevel:1, unlockedLevel:1,
+  musicOn:true, tutorialDone:false,
   powerups:{bomb:0,line:0,color:0,shuffle:0,hammer:0},
-  dailyLastClaim:null,
-  dailyStreak:0,
-  afkAccumulated:0,
-  afkLastVisit:Date.now(),
-  quests:[],
-  questsDate:null,
-  stats:{totalMatches:0, levelsCompleted:0, totalCoins:0 }
+  dailyLastClaim:null, dailyStreak:0,
+  afkAccumulated:0, afkLastVisit:Date.now(),
+  quests:[], questsDate:null,
+  stats:{totalMatches:0, levelsCompleted:0, totalCoins:0}
 };
-
 let currentScreen = null;
 
 // ==================== STORAGE ====================
 const STORAGE_KEY = 'crystal_match_data';
-
 async function saveData() {
   if (vkAvailable) {
     try { await vkBridge.send("VKWebAppStorageSet", { key: STORAGE_KEY, value: JSON.stringify(G) }); } catch(e) {}
@@ -633,10 +732,7 @@ async function loadData() {
   if (vkAvailable) {
     try {
       const r = await vkBridge.send("VKWebAppStorageGet", { keys: [STORAGE_KEY] });
-      if (r.keys && r.keys[0] && r.keys[0].value) {
-        const data = JSON.parse(r.keys[0].value);
-        Object.assign(G, data);
-      }
+      if (r.keys && r.keys[0] && r.keys[0].value) Object.assign(G, JSON.parse(r.keys[0].value));
     } catch(e) {}
   }
 }
@@ -734,13 +830,9 @@ function showInterstitialAd(callback) {
   stopMusic();
   if (vkAvailable) {
     try {
-      vkBridge.send("VKWebAppShowNativeAds", {ad_format:'interstitial'}).then(()=>{
-        if (G.musicOn) playMusic();
-        callback && callback();
-      }).catch(e=>{
-        if (G.musicOn) playMusic();
-        callback && callback();
-      });
+      vkBridge.send("VKWebAppShowNativeAds", {ad_format:'interstitial'})
+        .then(()=>{ if (G.musicOn) playMusic(); callback && callback(); })
+        .catch(()=>{ if (G.musicOn) playMusic(); callback && callback(); });
     } catch(e) { if (G.musicOn) playMusic(); callback&&callback(); }
   } else { setTimeout(()=>{ if(G.musicOn)playMusic(); callback&&callback(); },500); }
 }
@@ -748,14 +840,9 @@ function showRewardedAd(onReward, onClose) {
   stopMusic();
   if (vkAvailable) {
     try {
-      vkBridge.send("VKWebAppShowNativeAds", {ad_format:'reward'}).then(data=>{
-        if (G.musicOn) playMusic();
-        if (data && data.result) onReward && onReward();
-        else onClose && onClose();
-      }).catch(e=>{
-        if (G.musicOn) playMusic();
-        onClose && onClose();
-      });
+      vkBridge.send("VKWebAppShowNativeAds", {ad_format:'reward'})
+        .then(data=>{ if (G.musicOn) playMusic(); if (data && data.result) onReward && onReward(); else onClose && onClose(); })
+        .catch(()=>{ if (G.musicOn) playMusic(); onClose && onClose(); });
     } catch(e) { if(G.musicOn)playMusic(); onClose&&onClose(); }
   } else { setTimeout(()=>{ if(G.musicOn)playMusic(); onReward&&onReward(); },500); }
 }
@@ -766,7 +853,7 @@ function showBanner() {
       vkBridge.send("VKWebAppShowBannerAd", { banner_width:'320', banner_height:'65' }).then(()=>{
         const bc = document.getElementById('banner-container');
         bc.style.display='flex'; bc.style.height='65px'; bannerShown = true;
-      }).catch(e=>{});
+      }).catch(()=>{});
     } catch(e){}
   }
 }
@@ -779,13 +866,13 @@ function hideBanner() {
 
 // ==================== CRYSTAL DEFINITIONS ====================
 const CRYSTAL_TYPES = [
-  { color:'#ff4444', glow:'#ff8888', shape:'diamond', name:'ruby' },
-  { color:'#44aaff', glow:'#88ccff', shape:'circle', name:'sapphire' },
-  { color:'#44ff44', glow:'#88ff88', shape:'hexagon', name:'emerald' },
-  { color:'#ffaa22', glow:'#ffcc66', shape:'star', name:'topaz' },
-  { color:'#aa44ff', glow:'#cc88ff', shape:'square', name:'amethyst' },
-  { color:'#ff66aa', glow:'#ffaadd', shape:'triangle', name:'rose' },
-  { color:'#22dddd', glow:'#66eeee', shape:'pentagon', name:'aquamarine' }
+  { color:'#ff4444', glow:'#ff8888', shape:'diamond' },
+  { color:'#44aaff', glow:'#88ccff', shape:'circle' },
+  { color:'#44ff44', glow:'#88ff88', shape:'hexagon' },
+  { color:'#ffaa22', glow:'#ffcc66', shape:'star' },
+  { color:'#aa44ff', glow:'#cc88ff', shape:'square' },
+  { color:'#ff66aa', glow:'#ffaadd', shape:'triangle' },
+  { color:'#22dddd', glow:'#66eeee', shape:'pentagon' }
 ];
 function getCrystalTypesForLevel(level) { if (level<=30) return 5; if (level<=80) return 6; return 7; }
 function getLevelMode(level) {
@@ -1124,13 +1211,11 @@ class Match3 {
   draw() {
     const ctx = this.ctx;
     ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
-    // gradient bg
     const grad = ctx.createLinearGradient(0,0,this.canvas.width,this.canvas.height);
     grad.addColorStop(0,'rgba(20,10,50,0.7)');
     grad.addColorStop(0.5,'rgba(30,15,60,0.7)');
     grad.addColorStop(1,'rgba(15,20,55,0.7)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+    ctx.fillStyle = grad; ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
     for (let r=0; r<this.rows; r++)
       for (let c=0; c<this.cols; c++) {
         ctx.fillStyle = (r+c)%2===0 ? 'rgba(40,40,80,0.3)' : 'rgba(25,25,55,0.35)';
@@ -1239,12 +1324,11 @@ class Match3 {
 
 // ==================== SCREEN MANAGEMENT ====================
 let game = null, gameLoopId = null, lastTime = 0;
-
 function showScreen(name) {
   if (name === 'levels') buildLevels();
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const screen = document.getElementById(name + '-screen');
-  if (screen) screen.classList.add('active');
+  if (screen) { screen.classList.add('active'); screen.scrollTop = 0; }
   currentScreen = name;
   hideBanner();
   if (name === 'lobby' || name === 'game') setTimeout(showBanner, 300);
@@ -1253,6 +1337,7 @@ function t(key) { return I18N[G.lang][key] || key; }
 
 // ==================== DECORATIVE HELPERS ====================
 function createFloatingCrystals(container, count = 20) {
+  if (!container) return;
   const colors = ['#4facfe','#f093fb','#38ef7d','#ffd700','#f5576c','#22dddd','#aa44ff'];
   for (let i = 0; i < count; i++) {
     const el = document.createElement('div');
@@ -1274,7 +1359,6 @@ function createFloatingCrystals(container, count = 20) {
     </svg>`;
     container.appendChild(el);
   }
-  // sparkles
   for (let i = 0; i < 12; i++) {
     const sp = document.createElement('div');
     sp.className = 'bg-sparkle';
@@ -1305,8 +1389,6 @@ function buildLobby() {
   const today = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
   const dailyAvailable = G.dailyLastClaim !== today;
   const claimable = G.quests.filter(q => q.progress >= q.target && !q.claimed).length;
-
-  // Progress percent (level to max shown 500)
   const progressPct = Math.min(100, (G.unlockedLevel / 500) * 100);
 
   lobby.innerHTML = `
@@ -1319,9 +1401,9 @@ function buildLobby() {
       </div>
 
       <div class="stats-bar">
-        <div class="stat-pill"><span class="stat-icon">👑</span><span class="stat-value" id="stat-level">${t('level')} ${G.unlockedLevel}</span></div>
-        <div class="stat-pill gold"><span class="stat-icon">💰</span><span class="stat-value" id="coin-amount">${G.coins}</span></div>
-        <div class="stat-pill fire"><span class="stat-icon">🔥</span><span class="stat-value" id="stat-streak">${G.dailyStreak}/7</span></div>
+        <div class="stat-pill"><span class="stat-icon">👑</span><span class="stat-value">${t('level')} ${G.unlockedLevel}</span></div>
+        <div class="stat-pill gold"><span class="stat-icon">💰</span><span class="stat-value">${G.coins}</span></div>
+        <div class="stat-pill fire"><span class="stat-icon">🔥</span><span class="stat-value">${G.dailyStreak}/7</span></div>
       </div>
 
       <div class="progress-wrap">
@@ -1329,32 +1411,30 @@ function buildLobby() {
         <div class="progress-bar"><div class="progress-fill" style="width:${progressPct}%"></div></div>
       </div>
 
-      <div class="lobby-grid" id="lobby-grid"></div>
-
-      <div class="lobby-footer">CRYSTAL MATCH</div>
+      <div class="lobby-actions">
+        <div class="play-main-btn" id="play-main-btn">
+          <div class="play-icon">${playSVG()}</div>
+          <div class="play-text">${t('play')}</div>
+        </div>
+        <div class="lobby-grid" id="lobby-grid"></div>
+      </div>
     </div>
   `;
 
   createFloatingCrystals(document.getElementById('lobby-bg'), 22);
 
-  const grid = document.getElementById('lobby-grid');
-  grid.innerHTML = '';
+  document.getElementById('play-main-btn').onclick = () => {
+    playSfx('click'); buildScreen('levels'); showScreen('levels');
+  };
 
+  const grid = document.getElementById('lobby-grid');
   const buttons = [
-    { key:'play', icon:playSVG(), screen:'levels',
-      color:'linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%)' },
-    { key:'settings', icon:settingsSVG(), screen:'settings',
-      color:'linear-gradient(135deg,#2c3e50 0%,#3498db 100%)' },
-    { key:'quests', icon:questsSVG(), screen:'quests',
-      color:'linear-gradient(135deg,#e67e22 0%,#f39c12 100%)', badge: claimable },
-    { key:'afk', icon:afkSVG(), screen:'afk',
-      color:'linear-gradient(135deg,#9b59b6 0%,#8e44ad 100%)' },
-    { key:'daily', icon:dailySVG(), screen:'daily',
-      color:'linear-gradient(135deg,#e74c3c 0%,#c0392b 100%)', badge: dailyAvailable ? '!' : 0 },
-    { key:'shop', icon:shopSVG(), screen:'shop',
-      color:'linear-gradient(135deg,#1abc9c 0%,#16a085 100%)' },
-    { key:'invite', icon:inviteSVG(), screen:'invite',
-      color:'linear-gradient(135deg,#f9d423 0%,#ff4e50 100%)' }
+    { key:'settings', icon:settingsSVG(), screen:'settings', color:'linear-gradient(135deg,#2c3e50 0%,#3498db 100%)' },
+    { key:'quests', icon:questsSVG(), screen:'quests', color:'linear-gradient(135deg,#e67e22 0%,#f39c12 100%)', badge: claimable },
+    { key:'afk', icon:afkSVG(), screen:'afk', color:'linear-gradient(135deg,#9b59b6 0%,#8e44ad 100%)' },
+    { key:'daily', icon:dailySVG(), screen:'daily', color:'linear-gradient(135deg,#e74c3c 0%,#c0392b 100%)', badge: dailyAvailable ? '!' : 0 },
+    { key:'shop', icon:shopSVG(), screen:'shop', color:'linear-gradient(135deg,#1abc9c 0%,#16a085 100%)' },
+    { key:'invite', icon:inviteSVG(), screen:'invite', color:'linear-gradient(135deg,#f9d423 0%,#ff4e50 100%)' }
   ];
 
   buttons.forEach(btn => {
@@ -1366,11 +1446,8 @@ function buildLobby() {
       <span class="lobby-label">${t(btn.key)}</span>
       ${btn.badge ? `<div class="lobby-badge">${btn.badge}</div>` : ''}
     `;
-    if (btn.key === 'invite') {
-      el.onclick = () => { playSfx('click'); showInviteBox(); };
-    } else {
-      el.onclick = () => { playSfx('click'); buildScreen(btn.screen); showScreen(btn.screen); };
-    }
+    if (btn.key === 'invite') el.onclick = () => { playSfx('click'); showInviteBox(); };
+    else el.onclick = () => { playSfx('click'); buildScreen(btn.screen); showScreen(btn.screen); };
     grid.appendChild(el);
   });
 }
@@ -1389,7 +1466,7 @@ function colorSVG() { return `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r
 function shuffleSVG() { return `<svg viewBox="0 0 24 24" fill="#22dddd"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>`; }
 function hammerSVG() { return `<svg viewBox="0 0 24 24" fill="#ffaa22"><path d="M14.69 2.66L6.34 11l1.41 1.41 8.35-8.34-1.41-1.41zM2.66 14.69L11 6.34l1.41 1.41-8.34 8.35-1.41-1.41zM21.34 9.31L13 17.66l1.41 1.41 8.34-8.35-1.41-1.41z"/></svg>`; }
 
-// ==================== LEVELS SCREEN ====================
+// ==================== LEVELS ====================
 function buildLevels() {
   let screen = document.getElementById('levels-screen');
   if (!screen) {
@@ -1399,7 +1476,7 @@ function buildLevels() {
   }
   screen.innerHTML = `
     <div class="crystal-bg" id="levels-bg"></div>
-    <div style="width:95%;max-width:500px;display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;position:relative;z-index:2;">
+    <div style="width:95%;max-width:800px;display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;position:relative;z-index:2;padding-top:10px;">
       <button class="btn-back" onclick="playSfx('click');buildLobby();showScreen('lobby')">${t('back')}</button>
       <h2 style="color:#aaddff;font-size:22px;font-weight:900;text-shadow:0 0 12px rgba(100,180,255,.5);">${t('level')} ${G.unlockedLevel}</h2>
     </div>
@@ -1408,9 +1485,7 @@ function buildLevels() {
     </div>
   `;
   createFloatingCrystals(document.getElementById('levels-bg'), 12);
-
   const grid = document.getElementById('level-grid-el');
-  grid.innerHTML = '';
   const maxShow = Math.min(G.unlockedLevel + 20, 500);
   for (let i=1; i<=maxShow; i++) {
     const card = document.createElement('div');
@@ -1428,11 +1503,11 @@ function buildLevels() {
   setTimeout(() => {
     const container = screen.querySelector('.level-grid-container');
     const current = screen.querySelector('.level-card.current');
-    if (current) container.scrollTop = current.offsetTop - container.clientHeight/2;
+    if (current && container) container.scrollTop = current.offsetTop - container.clientHeight/2;
   }, 50);
 }
 
-// ==================== GAME SCREEN ====================
+// ==================== GAME ====================
 function buildGameScreen() {
   let screen = document.getElementById('game-screen');
   if (!screen) {
@@ -1445,9 +1520,11 @@ function buildGameScreen() {
 function startLevel(level) {
   buildGameScreen();
   const screen = document.getElementById('game-screen');
-  const isMobile = window.innerWidth < 600;
-  const boardSize = Math.min(isMobile ? window.innerWidth-20 : 500, window.innerHeight-250);
-  const canvasSize = Math.max(boardSize, 300);
+  // Адаптивный размер поля
+  const mobile = window.innerWidth < 768;
+  const boardMax = mobile ? Math.min(window.innerWidth - 24, 500) : Math.min(window.innerWidth - 120, 720);
+  const availH = window.innerHeight - (mobile ? 300 : 340);
+  const canvasSize = Math.max(260, Math.min(boardMax, availH));
 
   screen.innerHTML = `
     <div class="crystal-bg" id="game-bg"></div>
@@ -1458,7 +1535,7 @@ function startLevel(level) {
       <div class="game-info-box"><div class="label">${t('target')}</div><div class="value">${getLevelTarget(level)}</div></div>
       <div class="game-info-box"><div class="label" id="g-moves-label">${t('moves')}</div><div class="value" id="g-moves">${getLevelMoves(level)}</div></div>
     </div>
-    <div id="star-progress" style="width:95%;max-width:500px;margin-bottom:8px;display:flex;align-items:center;gap:6px;position:relative;z-index:2;">
+    <div id="star-progress" style="width:95%;max-width:600px;margin-bottom:8px;display:flex;align-items:center;gap:6px;position:relative;z-index:2;">
       <span style="color:#ffd700;font-size:12px;filter:drop-shadow(0 0 4px #ffd700);">⭐</span>
       <div style="flex:1;height:8px;background:rgba(20,20,50,.8);border-radius:4px;overflow:hidden;position:relative;border:1px solid rgba(100,150,255,.25);">
         <div id="star-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ffaa00,#ff6b6b);border-radius:4px;transition:width .3s;box-shadow:0 0 10px rgba(255,215,0,.6);"></div>
@@ -1500,9 +1577,7 @@ function startLevel(level) {
 
   showScreen('game');
 
-  // ========== AD CONDITION ==========
-  // Не показываем интерстишл, если игрок ещё ни разу не прошёл 1-й уровень
-  // (G.unlockedLevel === 1 → уровень 1 ещё не выигран)
+  // ===== Реклама ТОЛЬКО если игрок уже проходил 1-й уровень =====
   if (G.unlockedLevel > 1) {
     game.paused = true;
     showToast(t('adLoading'), 1500);
@@ -1519,7 +1594,6 @@ function gameLoop(time) {
   lastTime = time;
   game.update(dt);
   game.draw();
-
   const scoreEl = document.getElementById('g-score');
   const movesEl = document.getElementById('g-moves');
   const movesLabel = document.getElementById('g-moves-label');
@@ -1533,15 +1607,12 @@ function gameLoop(time) {
     if (puSlots[i]) puSlots[i].textContent = G.powerups[type]||0;
   });
   const starBar = document.getElementById('star-bar');
-  if (starBar && game) {
-    const pct = Math.min(100, (game.score / (game.target * 1.5)) * 100);
-    starBar.style.width = pct + '%';
-  }
+  if (starBar && game) starBar.style.width = Math.min(100, (game.score / (game.target * 1.5)) * 100) + '%';
   gameLoopId = requestAnimationFrame(gameLoop);
 }
 function stopGameLoop() { if (gameLoopId) { cancelAnimationFrame(gameLoopId); gameLoopId = null; } game = null; }
 
-// ==================== LEVEL WIN/LOSE ====================
+// ==================== WIN/LOSE ====================
 function onLevelWin(level, score) {
   playSfx('win');
   G.stats.levelsCompleted++;
@@ -1552,12 +1623,10 @@ function onLevelWin(level, score) {
   updateQuestProgress('score', score);
   updateQuestProgress('level', level);
   saveData();
-
   setTimeout(() => {
     const screen = document.getElementById('game-screen');
     const overlay = document.createElement('div');
     overlay.className = 'overlay-bg';
-    overlay.id = 'win-overlay';
     overlay.innerHTML = `
       <div class="overlay-content panel">
         <h2 style="color:#38ef7d;font-size:32px;margin-bottom:10px;text-shadow:0 0 20px rgba(56,239,125,.6);">${t('win')}</h2>
@@ -1596,7 +1665,6 @@ function onLevelWin(level, score) {
     };
   }, 500);
 }
-
 function onLevelLose() {
   setTimeout(() => {
     const screen = document.getElementById('game-screen');
@@ -1605,7 +1673,7 @@ function onLevelLose() {
     overlay.innerHTML = `
       <div class="overlay-content panel">
         <h2 style="color:#e74c3c;font-size:32px;margin-bottom:10px;text-shadow:0 0 20px rgba(231,76,60,.6);">${t('lose')}</h2>
-        <div style="display:flex;gap:10px;justify-content:center;margin-top:15px;">
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:15px;flex-wrap:wrap;">
           <button class="btn btn-primary" onclick="this.parentElement.parentElement.parentElement.remove();stopGameLoop();startLevel(game?game.level:${G.currentLevel});">${t('retry')}</button>
           <button class="btn btn-secondary" onclick="this.parentElement.parentElement.parentElement.remove();stopGameLoop();buildLobby();showScreen('lobby');">${t('menu')}</button>
         </div>
@@ -1625,7 +1693,7 @@ function buildSettings() {
   }
   screen.innerHTML = `
     <div class="crystal-bg" id="settings-bg"></div>
-    <div style="width:90%;max-width:420px;position:relative;z-index:2;">
+    <div style="width:90%;max-width:520px;position:relative;z-index:2;padding:20px 0;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
         <button class="btn-back" onclick="playSfx('click');buildLobby();showScreen('lobby')">${t('back')}</button>
         <h2 style="color:#aaddff;font-size:24px;font-weight:900;text-shadow:0 0 12px rgba(100,180,255,.5);">${t('settings')}</h2>
@@ -1659,12 +1727,32 @@ function buildSettings() {
     const code = document.getElementById('promo-input').value.trim().toLowerCase();
     if (code === 'clear12') {
       if (confirm(t('clearConfirm'))) {
-        G = { lang:G.lang, coins:100, currentLevel:1, unlockedLevel:1, musicOn:true, tutorialDone:true,
-          powerups:{bomb:0,line:0,color:0,shuffle:0,hammer:0}, dailyLastClaim:null, dailyStreak:0,
-          afkAccumulated:0, afkLastVisit:Date.now(), quests:[], questsDate:null,
-          stats:{totalMatches:0, levelsCompleted:0, totalCoins:0} };
-        saveData(); showToast(t('promoSuccess'));
-        setTimeout(()=>{ buildLobby(); showScreen('lobby'); }, 1000);
+        // Полный сброс: tutorialDone = false — чтобы окно обучения снова появилось
+        G = {
+          lang: G.lang,
+          coins: 100,
+          currentLevel: 1,
+          unlockedLevel: 1,
+          musicOn: G.musicOn,
+          tutorialDone: false,
+          powerups: { bomb:0, line:0, color:0, shuffle:0, hammer:0 },
+          dailyLastClaim: null,
+          dailyStreak: 0,
+          afkAccumulated: 0,
+          afkLastVisit: Date.now(),
+          quests: [],
+          questsDate: null,
+          stats: { totalMatches:0, levelsCompleted:0, totalCoins:0 }
+        };
+        saveData();
+        showToast(t('promoSuccess'), 1800);
+        stopGameLoop();
+        // Возвращаемся в лобби и показываем окно обучения
+        setTimeout(() => {
+          buildLobby();
+          showScreen('lobby');
+          setTimeout(showTutorialPrompt, 700);
+        }, 900);
       }
     } else if (code === 'admin17') {
       G.coins += 100000; saveData(); showToast(`+100000 ${t('coins')}!`); buildSettings();
@@ -1728,7 +1816,7 @@ function buildQuests() {
         <div class="quest-title">${q.desc[G.lang]}</div>
         <div class="quest-progress">${q.progress}/${q.target}</div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
         <div class="quest-reward"><svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffd700"/></svg>${q.reward}</div>
         <button class="quest-claim-btn" ${q.progress>=q.target&&!q.claimed?'':'disabled'} data-idx="${i}">${q.claimed?t('claimed'):t('claimReward')}</button>
       </div>
@@ -1737,7 +1825,7 @@ function buildQuests() {
   const allDone = G.quests.every(q => q.claimed);
   screen.innerHTML = `
     <div class="crystal-bg" id="quests-bg"></div>
-    <div style="width:90%;max-width:460px;position:relative;z-index:2;">
+    <div style="width:90%;max-width:640px;position:relative;z-index:2;padding:20px 0;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
         <button class="btn-back" onclick="playSfx('click');buildLobby();showScreen('lobby')">${t('back')}</button>
         <h2 style="color:#aaddff;font-size:24px;font-weight:900;text-shadow:0 0 12px rgba(100,180,255,.5);">${t('quests')}</h2>
@@ -1764,7 +1852,7 @@ function buildQuests() {
   });
 }
 
-// ==================== AFK ROOM ====================
+// ==================== AFK ====================
 let afkTimerId = null, afkAccumulator = 0;
 function buildAfk() {
   let screen = document.getElementById('afk-screen');
@@ -1786,7 +1874,7 @@ function buildAfk() {
   afkTimerId = setInterval(() => { afkAccumulator += earnPerSec; updateAfkDisplay(); }, 1000);
   screen.innerHTML = `
     <div class="crystal-bg" id="afk-bg"></div>
-    <div style="width:90%;max-width:400px;text-align:center;position:relative;z-index:2;">
+    <div style="width:90%;max-width:500px;text-align:center;position:relative;z-index:2;padding:20px 0;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
         <button class="btn-back" id="afk-back">${t('back')}</button>
         <h2 style="color:#aaddff;font-size:24px;font-weight:900;text-shadow:0 0 12px rgba(100,180,255,.5);">${t('afk')}</h2>
@@ -1794,7 +1882,6 @@ function buildAfk() {
       <div class="panel">
         <div class="afk-coin">
           <svg width="90" height="90" viewBox="0 0 80 80">
-            <circle cx="40" cy="40" r="35" fill="url(#goldGrad)" stroke="#daa520" stroke-width="3"/>
             <defs>
               <radialGradient id="goldGrad" cx="30%" cy="30%">
                 <stop offset="0%" stop-color="#fff3a0"/>
@@ -1802,6 +1889,7 @@ function buildAfk() {
                 <stop offset="100%" stop-color="#b8860b"/>
               </radialGradient>
             </defs>
+            <circle cx="40" cy="40" r="35" fill="url(#goldGrad)" stroke="#daa520" stroke-width="3"/>
             <text x="40" y="52" text-anchor="middle" font-size="30" font-weight="bold" fill="#b8860b" opacity="0.7">$</text>
           </svg>
         </div>
@@ -1837,7 +1925,7 @@ function buildAfk() {
   };
 }
 
-// ==================== DAILY REWARD ====================
+// ==================== DAILY ====================
 function buildDaily() {
   let screen = document.getElementById('daily-screen');
   if (!screen) {
@@ -1857,7 +1945,7 @@ function buildDaily() {
         <span style="color:#aaddff;font-weight:800;font-size:14px;">${dayLabels[i]}</span>
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="color:#ffd700;font-weight:900;font-size:16px;text-shadow:0 0 8px rgba(255,215,0,.4);">+${r}</span>
-          <svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="url(#goldGrad2)"/><defs><radialGradient id="goldGrad2" cx="30%" cy="30%"><stop offset="0%" stop-color="#fff3a0"/><stop offset="100%" stop-color="#daa520"/></radialGradient></defs></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffd700"/></svg>
           ${claimed?'<span style="color:#38ef7d;font-size:18px;font-weight:900;">✓</span>':isCurrent?`<button class="btn btn-success" style="padding:7px 14px;font-size:12px;" onclick="claimDaily(${i},${r})">${t('claimReward')}</button>`:''}
         </div>
       </div>
@@ -1865,7 +1953,7 @@ function buildDaily() {
   }).join('');
   screen.innerHTML = `
     <div class="crystal-bg" id="daily-bg"></div>
-    <div style="width:90%;max-width:400px;position:relative;z-index:2;">
+    <div style="width:90%;max-width:500px;position:relative;z-index:2;padding:20px 0;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
         <button class="btn-back" onclick="playSfx('click');buildLobby();showScreen('lobby')">${t('back')}</button>
         <h2 style="color:#aaddff;font-size:24px;font-weight:900;text-shadow:0 0 12px rgba(100,180,255,.5);">${t('daily')}</h2>
@@ -1929,7 +2017,7 @@ function buildShop() {
   }).join('');
   screen.innerHTML = `
     <div class="crystal-bg" id="shop-bg"></div>
-    <div style="width:95%;max-width:480px;display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;">
+    <div style="width:95%;max-width:800px;display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;padding:20px 0;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;width:100%;">
         <button class="btn-back" onclick="playSfx('click');buildLobby();showScreen('lobby')">${t('back')}</button>
         <h2 style="color:#aaddff;font-size:24px;font-weight:900;text-shadow:0 0 12px rgba(100,180,255,.5);">${t('shop')}</h2>
@@ -1960,6 +2048,8 @@ function buildShop() {
 
 // ==================== TUTORIAL ====================
 function showTutorialPrompt() {
+  const existing = document.getElementById('tutorial-prompt');
+  if (existing) existing.remove();
   const overlay = document.createElement('div');
   overlay.className = 'overlay-bg';
   overlay.id = 'tutorial-prompt';
@@ -1967,7 +2057,7 @@ function showTutorialPrompt() {
     <div class="overlay-content panel" style="text-align:center;">
       <svg width="60" height="60" viewBox="0 0 24 24" style="margin:0 auto 10px;"><path fill="#667eea" d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 21 12 17l-5.5 4 1.5-7.5L3 9l6.5-.5z"/></svg>
       <h2 style="color:#aaddff;font-size:22px;margin-bottom:15px;font-weight:900;">${t('tutorialQ')}</h2>
-      <div style="display:flex;gap:12px;justify-content:center;">
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
         <button class="btn btn-success" id="tut-yes">${t('yesT')}</button>
         <button class="btn btn-secondary" id="tut-no">${t('noT')}</button>
       </div>
@@ -1981,11 +2071,7 @@ function startTutorial() {
   startLevel(1);
   setTimeout(() => {
     const screen = document.getElementById('game-screen');
-    const steps = [
-      { text: t('tut1'), top: '40%' },
-      { text: t('tut2'), top: '50%' },
-      { text: t('tut3'), top: '60%' }
-    ];
+    const steps = [{ text: t('tut1'), top: '40%' }, { text: t('tut2'), top: '50%' }, { text: t('tut3'), top: '60%' }];
     let step = 0;
     function showStep() {
       const old = screen.querySelector('.tut-text');
