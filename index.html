@@ -30,7 +30,6 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 }
 .screen.active { display:flex; }
 
-/* ============ ANIMATIONS ============ */
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 @keyframes scaleIn { from{transform:scale(0.5);opacity:0} to{transform:scale(1);opacity:1} }
 @keyframes floatUp { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
@@ -48,13 +47,9 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 @keyframes starTwinkle { 0%,100%{opacity:.4;transform:scale(1)} 50%{opacity:1;transform:scale(1.2)} }
 @keyframes slideDown { from{transform:translate(-50%,-50px);opacity:0} to{transform:translate(-50%,0);opacity:1} }
 
-/* ============ CRYSTAL BACKGROUND ============ */
-.crystal-bg {
-  position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:0;
-}
+.crystal-bg { position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
 .crystal-bg::before {
-  content:'';
-  position:absolute; inset:0;
+  content:''; position:absolute; inset:0;
   background:
     radial-gradient(circle at 20% 30%, rgba(79,172,254,.12) 0%, transparent 35%),
     radial-gradient(circle at 80% 70%, rgba(240,147,251,.12) 0%, transparent 35%),
@@ -66,13 +61,8 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   animation: floatCrystal 8s ease-in-out infinite;
   filter: drop-shadow(0 0 8px currentColor);
 }
-.bg-sparkle {
-  position:absolute; pointer-events:none;
-  animation: starTwinkle 3s ease-in-out infinite;
-  font-size:12px;
-}
+.bg-sparkle { position:absolute; pointer-events:none; animation: starTwinkle 3s ease-in-out infinite; font-size:12px; }
 
-/* ============ TITLE ============ */
 .game-title {
   font-size:clamp(28px, 7vw, 44px);
   font-weight:900; letter-spacing:1px;
@@ -85,7 +75,6 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   text-align:center; padding:0 10px;
 }
 
-/* ============ BUTTONS ============ */
 .btn {
   cursor:pointer; border:none; border-radius:16px;
   padding:14px 28px; font-size:18px; font-weight:800; color:#fff;
@@ -94,16 +83,8 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   box-shadow: 0 6px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.25);
 }
 .btn:active { transform:scale(.94); }
-.btn::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:50%;
-  background:linear-gradient(180deg, rgba(255,255,255,.28), transparent);
-  border-radius:16px 16px 0 0; pointer-events:none;
-}
-.btn::after {
-  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
-  animation: shimmer 3.5s infinite;
-}
+.btn::before { content:''; position:absolute; top:0; left:0; right:0; height:50%; background:linear-gradient(180deg, rgba(255,255,255,.28), transparent); border-radius:16px 16px 0 0; pointer-events:none; }
+.btn::after { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent); animation: shimmer 3.5s infinite; }
 .btn-primary { background:linear-gradient(135deg,#667eea,#764ba2); }
 .btn-success { background:linear-gradient(135deg,#11998e,#38ef7d); }
 .btn-danger  { background:linear-gradient(135deg,#e74c3c,#c0392b); }
@@ -118,26 +99,20 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 }
 .btn-back:active { transform:scale(.94); }
 
-/* ============ PANEL ============ */
 .panel {
   background: linear-gradient(135deg, rgba(30,30,70,.88), rgba(18,18,42,.96));
   border-radius:22px; padding:22px; position:relative;
   backdrop-filter: blur(14px);
-  box-shadow:
-    0 12px 40px rgba(0,0,0,.5),
-    inset 0 1px 0 rgba(255,255,255,.12),
-    inset 0 0 40px rgba(79,172,254,.06);
+  box-shadow: 0 12px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.12), inset 0 0 40px rgba(79,172,254,.06);
 }
 .panel::before {
   content:''; position:absolute; inset:-2px; border-radius:22px; z-index:-1;
   background: linear-gradient(135deg, #4facfe, #f093fb, #38ef7d, #ffd700, #4facfe);
   background-size: 300% 300%;
   animation: borderGlow 5s linear infinite;
-  opacity:.55;
-  filter: blur(0.5px);
+  opacity:.55; filter: blur(0.5px);
 }
 
-/* ============ LOBBY ============ */
 #lobby-screen { overflow-y:auto; overflow-x:hidden; }
 .lobby-content {
   position:relative; z-index:2;
@@ -145,10 +120,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:24px 14px; gap:14px;
 }
-.title-wrap {
-  display:flex; align-items:center; justify-content:center; gap:12px;
-  margin-bottom:4px;
-}
+.title-wrap { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:4px; }
 .title-crystal {
   font-size:clamp(18px, 5vw, 30px);
   background:linear-gradient(135deg,#4facfe,#f093fb);
@@ -158,10 +130,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 }
 .title-crystal:last-child { animation-delay:1.5s; }
 
-.stats-bar {
-  display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
-  margin-bottom:6px;
-}
+.stats-bar { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:6px; }
 .stat-pill {
   display:flex; align-items:center; gap:6px;
   background: linear-gradient(135deg, rgba(30,30,70,.9), rgba(15,15,40,.95));
@@ -194,10 +163,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   box-shadow: 0 0 10px rgba(79,172,254,.6);
 }
 
-.lobby-actions {
-  width:100%; max-width:440px;
-  display:flex; flex-direction:column; gap:12px;
-}
+.lobby-actions { width:100%; max-width:440px; display:flex; flex-direction:column; gap:12px; }
 .play-main-btn {
   display:flex; align-items:center; justify-content:center; gap:14px;
   padding:18px 24px; min-height:76px;
@@ -218,19 +184,10 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 .play-main-btn:active { transform:scale(.96); }
 .play-main-btn .play-icon { width:36px; height:36px; }
 .play-main-btn .play-icon svg { width:100%; height:100%; filter: drop-shadow(0 2px 6px rgba(0,0,0,.4)); }
-.play-main-btn .play-text {
-  font-size:22px; font-weight:900; color:#fff;
-  text-transform:uppercase; letter-spacing:2px;
-  text-shadow: 0 2px 8px rgba(0,0,0,.5);
-}
+.play-main-btn .play-text { font-size:22px; font-weight:900; color:#fff; text-transform:uppercase; letter-spacing:2px; text-shadow: 0 2px 8px rgba(0,0,0,.5); }
 
-.lobby-grid {
-  display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;
-  width:100%;
-}
-@media (max-width: 380px) {
-  .lobby-grid { grid-template-columns:repeat(2, 1fr); }
-}
+.lobby-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; width:100%; }
+@media (max-width: 380px) { .lobby-grid { grid-template-columns:repeat(2, 1fr); } }
 .lobby-btn {
   position:relative;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -241,30 +198,12 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   box-shadow: 0 6px 18px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.25), inset 0 -20px 30px rgba(0,0,0,.2);
   border:1px solid rgba(255,255,255,.12);
 }
-.lobby-btn::before {
-  content:''; position:absolute; inset:0; border-radius:16px;
-  background: linear-gradient(180deg, rgba(255,255,255,.15), transparent 45%);
-  pointer-events:none;
-}
-.lobby-btn::after {
-  content:''; position:absolute; top:0; left:-100%; width:60%; height:100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
-  transform: skewX(-20deg);
-  animation: shimmer 4s infinite;
-  pointer-events:none;
-}
+.lobby-btn::before { content:''; position:absolute; inset:0; border-radius:16px; background: linear-gradient(180deg, rgba(255,255,255,.15), transparent 45%); pointer-events:none; }
+.lobby-btn::after { content:''; position:absolute; top:0; left:-100%; width:60%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent); transform: skewX(-20deg); animation: shimmer 4s infinite; pointer-events:none; }
 .lobby-btn:active { transform:scale(.93); }
-.lobby-btn .lobby-icon {
-  width:38px; height:38px;
-  display:flex; align-items:center; justify-content:center;
-  filter: drop-shadow(0 3px 6px rgba(0,0,0,.4));
-}
+.lobby-btn .lobby-icon { width:38px; height:38px; display:flex; align-items:center; justify-content:center; filter: drop-shadow(0 3px 6px rgba(0,0,0,.4)); }
 .lobby-btn .lobby-icon svg { width:100%; height:100%; }
-.lobby-btn .lobby-label {
-  font-size:11px; font-weight:900; color:#fff; letter-spacing:.5px;
-  text-shadow: 0 2px 4px rgba(0,0,0,.5);
-  text-transform: uppercase; text-align:center;
-}
+.lobby-btn .lobby-label { font-size:11px; font-weight:900; color:#fff; letter-spacing:.5px; text-shadow: 0 2px 4px rgba(0,0,0,.5); text-transform: uppercase; text-align:center; }
 .lobby-badge {
   position:absolute; top:8px; right:8px;
   min-width:18px; height:18px; padding:0 5px;
@@ -275,7 +214,6 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   animation: pulse 1.5s infinite;
 }
 
-/* ============ LEVELS ============ */
 .level-grid-container {
   max-width:500px; width:95%; max-height:65vh; overflow-y:auto; padding:10px;
   scrollbar-width:thin; scrollbar-color:rgba(100,150,255,.4) rgba(30,30,70,.3);
@@ -288,24 +226,11 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
   border-radius:12px; cursor:pointer; transition:transform .15s; font-weight:800; position:relative;
 }
-.level-card.unlocked {
-  background: linear-gradient(135deg,#667eea,#764ba2);
-  color:#fff; box-shadow: 0 3px 12px rgba(102,126,234,.4), inset 0 1px 0 rgba(255,255,255,.25);
-  border:1px solid rgba(255,255,255,.15);
-}
-.level-card.locked {
-  background: rgba(40,40,60,.6); color:#555; cursor:not-allowed;
-  border:1px solid rgba(100,150,255,.1);
-}
-.level-card.current {
-  background: linear-gradient(135deg,#38ef7d,#11998e); color:#fff;
-  animation: pulse 1.5s infinite;
-  box-shadow: 0 0 20px rgba(56,239,125,.6), inset 0 1px 0 rgba(255,255,255,.3);
-  border:1px solid rgba(255,255,255,.3);
-}
+.level-card.unlocked { background: linear-gradient(135deg,#667eea,#764ba2); color:#fff; box-shadow: 0 3px 12px rgba(102,126,234,.4), inset 0 1px 0 rgba(255,255,255,.25); border:1px solid rgba(255,255,255,.15); }
+.level-card.locked { background: rgba(40,40,60,.6); color:#555; cursor:not-allowed; border:1px solid rgba(100,150,255,.1); }
+.level-card.current { background: linear-gradient(135deg,#38ef7d,#11998e); color:#fff; animation: pulse 1.5s infinite; box-shadow: 0 0 20px rgba(56,239,125,.6), inset 0 1px 0 rgba(255,255,255,.3); border:1px solid rgba(255,255,255,.3); }
 .level-card:active { transform:scale(.9); }
 
-/* ============ GAME ============ */
 #game-screen { flex-direction:column; overflow-y:auto; overflow-x:hidden; padding:10px 0 15px; }
 #game-screen * { scrollbar-width:none; }
 #game-screen *::-webkit-scrollbar { display:none; }
@@ -315,7 +240,8 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
     0 0 40px rgba(100,150,255,.4),
     0 0 0 2px rgba(100,150,255,.3),
     inset 0 0 40px rgba(79,172,254,.1);
-  margin:8px 0; max-width:96vw; max-height:70vh;
+  margin:8px 0;
+  display:block;
 }
 .game-top-bar {
   width:95%; max-width:500px;
@@ -350,25 +276,18 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   box-shadow: 0 2px 6px rgba(255,75,75,.6), 0 0 0 2px rgba(255,255,255,.15);
 }
 
-/* ============ OVERLAY ============ */
 .overlay-bg {
   position:absolute; inset:0;
   background: radial-gradient(circle at center, rgba(20,10,40,.8), rgba(0,0,0,.9));
   display:flex; align-items:center; justify-content:center; z-index:50;
-  animation: fadeIn .3s; backdrop-filter: blur(6px);
-  padding:20px;
+  animation: fadeIn .3s; backdrop-filter: blur(6px); padding:20px;
 }
 .overlay-content { animation: scaleIn .35s cubic-bezier(.34,1.56,.64,1); text-align:center; max-width:90%; }
 .star-rating { display:flex; gap:10px; justify-content:center; margin:20px 0; }
 .star { width:50px; height:50px; animation: popIn .5s; }
 .star.filled { filter: drop-shadow(0 0 12px gold) drop-shadow(0 0 25px rgba(255,215,0,.6)); }
 
-/* ============ SETTINGS ============ */
-.settings-row {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:14px 0; border-bottom:1px solid rgba(100,150,255,.15); width:100%; gap:12px;
-  flex-wrap:wrap;
-}
+.settings-row { display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid rgba(100,150,255,.15); width:100%; gap:12px; flex-wrap:wrap; }
 .settings-row:last-child { border:none; }
 .settings-label { color:#aaddff; font-size:15px; font-weight:700; letter-spacing:.3px; }
 .toggle-switch {
@@ -377,27 +296,11 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   border:1px solid rgba(100,150,255,.2);
   box-shadow: inset 0 2px 6px rgba(0,0,0,.4); flex-shrink:0;
 }
-.toggle-switch.on {
-  background: linear-gradient(135deg,#38ef7d,#11998e);
-  box-shadow: 0 0 15px rgba(56,239,125,.5), inset 0 2px 6px rgba(0,0,0,.2);
-}
-.toggle-switch .knob {
-  position:absolute; top:3px; left:3px; width:24px; height:24px;
-  background: linear-gradient(180deg,#fff,#dde); border-radius:50%;
-  transition:left .3s; box-shadow: 0 2px 6px rgba(0,0,0,.4);
-}
+.toggle-switch.on { background: linear-gradient(135deg,#38ef7d,#11998e); box-shadow: 0 0 15px rgba(56,239,125,.5), inset 0 2px 6px rgba(0,0,0,.2); }
+.toggle-switch .knob { position:absolute; top:3px; left:3px; width:24px; height:24px; background: linear-gradient(180deg,#fff,#dde); border-radius:50%; transition:left .3s; box-shadow: 0 2px 6px rgba(0,0,0,.4); }
 .toggle-switch.on .knob { left:27px; }
-.lang-btn {
-  padding:8px 18px; border-radius:10px; cursor:pointer; font-weight:800;
-  border:2px solid transparent;
-  background: rgba(40,40,70,.8); color:#aaddff; transition: all .2s;
-  font-size:13px; letter-spacing:.5px;
-}
-.lang-btn.active {
-  border-color:#38ef7d; color:#38ef7d;
-  background: rgba(56,239,125,.1);
-  box-shadow: 0 0 14px rgba(56,239,125,.4);
-}
+.lang-btn { padding:8px 18px; border-radius:10px; cursor:pointer; font-weight:800; border:2px solid transparent; background: rgba(40,40,70,.8); color:#aaddff; transition: all .2s; font-size:13px; letter-spacing:.5px; }
+.lang-btn.active { border-color:#38ef7d; color:#38ef7d; background: rgba(56,239,125,.1); box-shadow: 0 0 14px rgba(56,239,125,.4); }
 .promo-input {
   width:100%; padding:12px; border-radius:12px;
   background: rgba(20,20,50,.9); border:1px solid rgba(100,150,255,.3);
@@ -407,7 +310,6 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 }
 .promo-input:focus { border-color:#4facfe; }
 
-/* ============ QUESTS ============ */
 .quest-card {
   background: linear-gradient(135deg, rgba(30,30,70,.75), rgba(18,18,42,.85));
   border:1px solid rgba(100,150,255,.25);
@@ -416,10 +318,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   box-shadow: 0 4px 12px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.08);
   position: relative; overflow: hidden;
 }
-.quest-card::before {
-  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
-  background: linear-gradient(180deg,#4facfe,#f093fb);
-}
+.quest-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background: linear-gradient(180deg,#4facfe,#f093fb); }
 .quest-info { flex:1; min-width:0; }
 .quest-title { color:#fff; font-weight:800; font-size:14px; word-break:break-word; }
 .quest-progress { color:#8899bb; font-size:12px; margin-top:4px; font-weight:600; }
@@ -434,15 +333,19 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 .quest-claim-btn:active { transform: scale(.93); }
 .quest-claim-btn:disabled { opacity:.35; cursor:not-allowed; box-shadow:none; }
 .quest-scroll-wrap {
-  max-height:58vh; overflow-y:auto; padding:10px 5px;
+  flex:1; min-height:0;
+  overflow-y:auto; padding:10px 5px;
   scrollbar-width:thin; scrollbar-color:rgba(100,150,255,.4) rgba(30,30,70,.3);
 }
 .quest-scroll-wrap::-webkit-scrollbar { width:6px; }
 .quest-scroll-wrap::-webkit-scrollbar-track { background:rgba(30,30,70,.3); border-radius:3px; }
 .quest-scroll-wrap::-webkit-scrollbar-thumb { background:rgba(100,150,255,.4); border-radius:3px; }
 
-/* ============ SHOP ============ */
-.shop-scroll-wrap { width:95%; max-width:460px; max-height:60vh; overflow-y:auto; padding:10px 5px; }
+.shop-scroll-wrap {
+  width:100%; flex:1; min-height:0;
+  overflow-y:auto; padding:10px 5px;
+  scrollbar-width:thin; scrollbar-color:rgba(100,150,255,.4) rgba(30,30,70,.3);
+}
 .shop-scroll-wrap::-webkit-scrollbar { width:6px; }
 .shop-scroll-wrap::-webkit-scrollbar-track { background:rgba(30,30,70,.3); border-radius:3px; }
 .shop-scroll-wrap::-webkit-scrollbar-thumb { background:rgba(100,150,255,.4); border-radius:3px; }
@@ -455,11 +358,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   box-shadow: 0 4px 14px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.08);
   position: relative; overflow: hidden;
 }
-.shop-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background: linear-gradient(90deg, transparent, rgba(100,180,255,.7), transparent);
-  animation: shimmer 3s infinite;
-}
+.shop-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background: linear-gradient(90deg, transparent, rgba(100,180,255,.7), transparent); animation: shimmer 3s infinite; }
 .shop-card svg { width:42px; height:42px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.4)); }
 .shop-card .name { color:#aaddff; font-weight:800; font-size:13px; letter-spacing:.3px; }
 .shop-card .desc { color:#8899bb; font-size:11px; line-height:1.3; }
@@ -475,7 +374,6 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 .buy-btn:active { transform: scale(.95); }
 .buy-btn:disabled { opacity:.4; cursor:not-allowed; box-shadow:none; }
 
-/* ============ DAILY ============ */
 .daily-grid { display:flex; flex-direction:column; gap:10px; max-width:400px; width:100%; }
 .daily-row {
   display:flex; align-items:center; justify-content:space-between;
@@ -486,19 +384,13 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   transition: all .3s;
 }
 .daily-row.claimed { opacity:.4; }
-.daily-row.available {
-  border-color:#38ef7d; animation: pulse 2s infinite;
-  box-shadow: 0 0 20px rgba(56,239,125,.4), inset 0 1px 0 rgba(255,255,255,.1);
-}
+.daily-row.available { border-color:#38ef7d; animation: pulse 2s infinite; box-shadow: 0 0 20px rgba(56,239,125,.4), inset 0 1px 0 rgba(255,255,255,.1); }
 
-/* ============ AFK ============ */
 .afk-info { text-align:center; margin:20px 0; }
 .afk-coin { width:90px; height:90px; margin:0 auto 16px; animation: floatUp 2s infinite; filter: drop-shadow(0 0 20px rgba(255,215,0,.5)); }
 
-/* ============ BANNER ============ */
 #banner-container { position:fixed; bottom:0; left:0; width:100%; height:65px; z-index:100; display:none; justify-content:center; align-items:center; background:rgba(0,0,0,.3); }
 
-/* ============ TOAST ============ */
 .toast {
   position:fixed; top:20px; left:50%; transform:translateX(-50%);
   background: linear-gradient(135deg, rgba(40,40,80,.97), rgba(25,25,55,.97));
@@ -515,7 +407,6 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   box-shadow: 0 8px 24px rgba(0,0,0,.7);
 }
 
-/* ============ RESPONSIVE: TABLET ============ */
 @media (min-width: 600px) {
   .lobby-actions { max-width: 560px; }
   .progress-wrap { max-width: 560px; }
@@ -525,13 +416,11 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   .game-top-bar { max-width: 620px; }
   .game-info-box { padding: 8px 16px; min-width: 85px; }
   .game-info-box .value { font-size: 20px; }
-  .shop-scroll-wrap { max-width: 600px; }
   .lobby-btn .lobby-icon { width: 46px; height: 46px; }
   .lobby-btn .lobby-label { font-size: 12px; }
   .lobby-btn { min-height: 110px; }
 }
 
-/* ============ RESPONSIVE: DESKTOP ============ */
 @media (min-width: 900px) {
   .lobby-actions { max-width: 720px; }
   .progress-wrap { max-width: 720px; }
@@ -558,13 +447,11 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   .level-grid-container { max-width: 780px; max-height: 72vh; }
   .level-card { font-size: 15px; }
 
-  .quest-scroll-wrap { max-height: 62vh; }
   .quest-title { font-size: 15px; }
   .quest-progress { font-size: 13px; }
   .quest-claim-btn { font-size: 13px; padding: 10px 20px; }
   .quest-reward { font-size: 15px; }
 
-  .shop-scroll-wrap { max-width: 780px; max-height: 65vh; }
   .shop-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .shop-card { padding: 18px; }
   .shop-card svg { width: 52px; height: 52px; }
@@ -575,9 +462,8 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 
   .daily-grid { max-width: 500px; }
   .daily-row { padding: 16px; }
-  .daily-row > span:first-child { font-size: 16px; }
 
-  .game-top-bar { max-width: 720px; }
+  .game-top-bar { max-width: 820px; }
   .game-info-box { padding: 10px 20px; min-width: 100px; }
   .game-info-box .value { font-size: 22px; }
   .game-info-box .label { font-size: 11px; }
@@ -588,7 +474,6 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   #game-canvas { border-radius: 20px; }
 }
 
-/* ============ RESPONSIVE: LARGE DESKTOP ============ */
 @media (min-width: 1200px) {
   .lobby-actions { max-width: 840px; }
   .progress-wrap { max-width: 840px; }
@@ -601,13 +486,9 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
   .level-grid { grid-template-columns: repeat(10, 1fr); }
   .level-grid-container { max-width: 920px; }
 
-  .game-top-bar { max-width: 820px; }
-
-  .shop-scroll-wrap { max-width: 900px; }
   .panel { max-width: 720px; }
 }
 
-/* ============ SMALL HEIGHT FIX ============ */
 @media (max-height: 640px) and (orientation: landscape) {
   .game-title { font-size: clamp(22px, 5vw, 32px); }
   .lobby-content { padding: 12px; gap: 8px; }
@@ -627,7 +508,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 let vkAvailable = false;
 try {
   if (typeof vkBridge !== 'undefined') {
-    vkBridge.send("VKWebAppInit").then(r => { vkAvailable = true; }).catch(e => { vkAvailable = false; });
+    vkBridge.send("VKWebAppInit").then(() => { vkAvailable = true; }).catch(() => { vkAvailable = false; });
   }
 } catch(e) { vkAvailable = false; }
 
@@ -636,16 +517,11 @@ function showInviteBox() {
   else showToast(t('invite'));
 }
 
-// ==================== VIEW HIDE/RESTORE ====================
 let musicWasPlaying = false;
 if (typeof vkBridge !== 'undefined') {
   vkBridge.subscribe((e) => {
-    if (e.detail && e.detail.type === 'VKWebAppViewHide') {
-      if (musicPlaying) { musicWasPlaying = true; stopMusic(); }
-    }
-    if (e.detail && e.detail.type === 'VKWebAppViewRestore') {
-      if (musicWasPlaying && G.musicOn) { musicWasPlaying = false; playMusic(); }
-    }
+    if (e.detail && e.detail.type === 'VKWebAppViewHide') { if (musicPlaying) { musicWasPlaying = true; stopMusic(); } }
+    if (e.detail && e.detail.type === 'VKWebAppViewRestore') { if (musicWasPlaying && G.musicOn) { musicWasPlaying = false; playMusic(); } }
   });
 }
 self.addEventListener('blur', () => { if (musicPlaying) { musicWasPlaying = true; stopMusic(); } });
@@ -655,7 +531,6 @@ document.addEventListener('visibilitychange', () => {
   else { if (musicWasPlaying && G.musicOn) { musicWasPlaying = false; playMusic(); } }
 });
 
-// ==================== TRANSLATIONS ====================
 const I18N = {
   ru: {
     title:"Кристальный Мэтч", play:"Играть", settings:"Настройки", quests:"Задания", afk:"Отдых",
@@ -678,9 +553,7 @@ const I18N = {
     adLoading:"Загрузка рекламы...", adError:"Реклама недоступна",
     clearConfirm:"Вы уверены? Все данные будут удалены!",
     promoSuccess:"Промокод активирован! Данные сброшены.", promoFail:"Неверный промокод",
-    progressSaved:"Прогресс сохранён", modes:"Режим", classic:"Классика", timed:"На время",
-    movesLimit:"Ограничение ходов", obstacles:"Препятствия", blind:"Вслепую", invite:"Друзья",
-    progress:"Прогресс", stats:"Статистика", dayStreak:"Серия"
+    progressSaved:"Прогресс сохранён", invite:"Друзья", progress:"Прогресс"
   },
   en: {
     title:"Crystal Match", play:"Play", settings:"Settings", quests:"Quests", afk:"AFK",
@@ -703,13 +576,10 @@ const I18N = {
     adLoading:"Loading ad...", adError:"Ad unavailable",
     clearConfirm:"Are you sure? All data will be deleted!",
     promoSuccess:"Promo activated! Data reset.", promoFail:"Invalid promo code",
-    progressSaved:"Progress saved", modes:"Mode", classic:"Classic", timed:"Timed",
-    movesLimit:"Move Limit", obstacles:"Obstacles", blind:"Blind", invite:"Friends",
-    progress:"Progress", stats:"Statistics", dayStreak:"Streak"
+    progressSaved:"Progress saved", invite:"Friends", progress:"Progress"
   }
 };
 
-// ==================== GAME STATE ====================
 let G = {
   lang:'ru', coins:100, currentLevel:1, unlockedLevel:1,
   musicOn:true, tutorialDone:false,
@@ -721,12 +591,9 @@ let G = {
 };
 let currentScreen = null;
 
-// ==================== STORAGE ====================
 const STORAGE_KEY = 'crystal_match_data';
 async function saveData() {
-  if (vkAvailable) {
-    try { await vkBridge.send("VKWebAppStorageSet", { key: STORAGE_KEY, value: JSON.stringify(G) }); } catch(e) {}
-  }
+  if (vkAvailable) { try { await vkBridge.send("VKWebAppStorageSet", { key: STORAGE_KEY, value: JSON.stringify(G) }); } catch(e) {} }
 }
 async function loadData() {
   if (vkAvailable) {
@@ -737,7 +604,6 @@ async function loadData() {
   }
 }
 
-// ==================== AUDIO ====================
 let audioCtx = null, musicGain = null, musicOscs = [], musicPlaying = false, musicInterval = null;
 function initAudio() { if (!audioCtx) { try { audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} } }
 function playMusic() {
@@ -828,36 +694,49 @@ function playSfx(type) {
 // ==================== ADS ====================
 function showInterstitialAd(callback) {
   stopMusic();
+  const finish = () => {
+    if (G.musicOn) playMusic();
+    setTimeout(showBanner, 200);
+    callback && callback();
+  };
   if (vkAvailable) {
     try {
       vkBridge.send("VKWebAppShowNativeAds", {ad_format:'interstitial'})
-        .then(()=>{ if (G.musicOn) playMusic(); callback && callback(); })
-        .catch(()=>{ if (G.musicOn) playMusic(); callback && callback(); });
-    } catch(e) { if (G.musicOn) playMusic(); callback&&callback(); }
-  } else { setTimeout(()=>{ if(G.musicOn)playMusic(); callback&&callback(); },500); }
+        .then(finish).catch(finish);
+    } catch(e) { finish(); }
+  } else setTimeout(finish, 500);
 }
 function showRewardedAd(onReward, onClose) {
   stopMusic();
+  const finish = (success) => {
+    if (G.musicOn) playMusic();
+    setTimeout(showBanner, 200);
+    if (success) onReward && onReward();
+    else onClose && onClose();
+  };
   if (vkAvailable) {
     try {
       vkBridge.send("VKWebAppShowNativeAds", {ad_format:'reward'})
-        .then(data=>{ if (G.musicOn) playMusic(); if (data && data.result) onReward && onReward(); else onClose && onClose(); })
-        .catch(()=>{ if (G.musicOn) playMusic(); onClose && onClose(); });
-    } catch(e) { if(G.musicOn)playMusic(); onClose&&onClose(); }
-  } else { setTimeout(()=>{ if(G.musicOn)playMusic(); onReward&&onReward(); },500); }
+        .then(data => finish(data && data.result))
+        .catch(() => finish(false));
+    } catch(e) { finish(false); }
+  } else setTimeout(() => finish(true), 500);
 }
+
+// ==================== BANNER (always on) ====================
 let bannerShown = false;
 function showBanner() {
-  if (vkAvailable && !bannerShown) {
-    try {
-      vkBridge.send("VKWebAppShowBannerAd", { banner_width:'320', banner_height:'65' }).then(()=>{
-        const bc = document.getElementById('banner-container');
-        bc.style.display='flex'; bc.style.height='65px'; bannerShown = true;
-      }).catch(()=>{});
-    } catch(e){}
-  }
+  if (!vkAvailable) return;
+  try {
+    vkBridge.send("VKWebAppShowBannerAd", { banner_width:'320', banner_height:'65' }).then(()=>{
+      const bc = document.getElementById('banner-container');
+      if (bc) { bc.style.display='flex'; bc.style.height='65px'; }
+      bannerShown = true;
+    }).catch(()=>{});
+  } catch(e){}
 }
 function hideBanner() {
+  // Kept for compatibility, but NOT called anywhere — banner always stays on.
   if (vkAvailable && bannerShown) {
     try { vkBridge.send("VKWebAppHideBannerAd"); } catch(e){}
     document.getElementById('banner-container').style.display='none'; bannerShown = false;
@@ -891,7 +770,6 @@ function getLevelMoves(level) {
   return Math.max(20, 35 - Math.floor(level/25));
 }
 
-// ==================== MATCH-3 ENGINE ====================
 class Match3 {
   constructor(canvas, level) {
     this.canvas = canvas; this.ctx = canvas.getContext('2d');
@@ -1122,9 +1000,8 @@ class Match3 {
     animate();
   }
   checkGameOver() {
-    if (this.score >= this.target * 1.5) {
-      this.won = true; this.gameOver = true; onLevelWin(this.level, this.score);
-    } else if (this.mode === 'timed') {
+    if (this.score >= this.target * 1.5) { this.won = true; this.gameOver = true; onLevelWin(this.level, this.score); }
+    else if (this.mode === 'timed') {
       if (this.timeLeft <= 0) {
         if (this.score >= this.target) { this.won = true; this.gameOver = true; onLevelWin(this.level, this.score); }
         else { this.gameOver = true; onLevelLose(); }
@@ -1142,23 +1019,14 @@ class Match3 {
     for (let i=0; i<12; i++) {
       const angle = (Math.PI*2*i)/12 + Math.random()*0.3;
       const speed = Math.random()*5+2;
-      this.particles.push({
-        x, y, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed-2,
-        life:1, color: i%2===0 ? color : glow, size:Math.random()*5+2,
-        type:'circle', rotation:0, rotSpeed:(Math.random()-0.5)*0.3
-      });
+      this.particles.push({ x, y, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed-2, life:1, color: i%2===0 ? color : glow, size:Math.random()*5+2, type:'circle', rotation:0, rotSpeed:(Math.random()-0.5)*0.3 });
     }
   }
   addSparkles(x, y) {
     for (let i=0; i<6; i++) {
       const angle = Math.random()*Math.PI*2;
       const dist = Math.random()*20+10;
-      this.particles.push({
-        x:x+Math.cos(angle)*dist, y:y+Math.sin(angle)*dist,
-        vx:Math.cos(angle)*1, vy:Math.sin(angle)*1-1,
-        life:1, color:'#ffffff', size:Math.random()*3+1,
-        type:'sparkle', rotation:Math.random()*Math.PI, rotSpeed:(Math.random()-0.5)*0.2
-      });
+      this.particles.push({ x:x+Math.cos(angle)*dist, y:y+Math.sin(angle)*dist, vx:Math.cos(angle)*1, vy:Math.sin(angle)*1-1, life:1, color:'#ffffff', size:Math.random()*3+1, type:'sparkle', rotation:Math.random()*Math.PI, rotSpeed:(Math.random()-0.5)*0.2 });
     }
   }
   usePowerup(type, r, c) {
@@ -1322,20 +1190,18 @@ class Match3 {
   }
 }
 
-// ==================== SCREEN MANAGEMENT ====================
 let game = null, gameLoopId = null, lastTime = 0;
+
 function showScreen(name) {
   if (name === 'levels') buildLevels();
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const screen = document.getElementById(name + '-screen');
   if (screen) { screen.classList.add('active'); screen.scrollTop = 0; }
   currentScreen = name;
-  hideBanner();
-  if (name === 'lobby' || name === 'game') setTimeout(showBanner, 300);
+  // NOTE: banner не трогаем — он всегда включён
 }
 function t(key) { return I18N[G.lang][key] || key; }
 
-// ==================== DECORATIVE HELPERS ====================
 function createFloatingCrystals(container, count = 20) {
   if (!container) return;
   const colors = ['#4facfe','#f093fb','#38ef7d','#ffd700','#f5576c','#22dddd','#aa44ff'];
@@ -1344,89 +1210,49 @@ function createFloatingCrystals(container, count = 20) {
     el.className = 'floating-crystal';
     const size = 8 + Math.random() * 26;
     const color = colors[Math.floor(Math.random() * colors.length)];
-    el.style.cssText = `
-      left:${Math.random()*100}%;
-      top:${Math.random()*100}%;
-      width:${size}px; height:${size}px;
-      color:${color};
-      animation-delay:${Math.random()*8}s;
-      animation-duration:${6 + Math.random()*6}s;
-    `;
-    el.innerHTML = `<svg viewBox="0 0 100 100" style="width:100%;height:100%;">
-      <polygon points="50,5 90,30 80,90 20,90 10,30" fill="currentColor" opacity="0.55"/>
-      <polygon points="50,5 90,30 50,50" fill="white" opacity="0.25"/>
-      <polygon points="50,5 50,50 10,30" fill="white" opacity="0.12"/>
-    </svg>`;
+    el.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${size}px;height:${size}px;color:${color};animation-delay:${Math.random()*8}s;animation-duration:${6 + Math.random()*6}s;`;
+    el.innerHTML = `<svg viewBox="0 0 100 100" style="width:100%;height:100%;"><polygon points="50,5 90,30 80,90 20,90 10,30" fill="currentColor" opacity="0.55"/><polygon points="50,5 90,30 50,50" fill="white" opacity="0.25"/><polygon points="50,5 50,50 10,30" fill="white" opacity="0.12"/></svg>`;
     container.appendChild(el);
   }
   for (let i = 0; i < 12; i++) {
     const sp = document.createElement('div');
     sp.className = 'bg-sparkle';
     sp.textContent = '✦';
-    sp.style.cssText = `
-      left:${Math.random()*100}%;
-      top:${Math.random()*100}%;
-      color:${colors[Math.floor(Math.random()*colors.length)]};
-      animation-delay:${Math.random()*3}s;
-      text-shadow:0 0 8px currentColor;
-    `;
+    sp.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;color:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*3}s;text-shadow:0 0 8px currentColor;`;
     container.appendChild(sp);
   }
 }
 
-// ==================== LOBBY ====================
 function buildLobby() {
   const container = document.getElementById('game-container');
   let lobby = document.getElementById('lobby-screen');
-  if (!lobby) {
-    lobby = document.createElement('div');
-    lobby.id = 'lobby-screen';
-    lobby.className = 'screen';
-    container.appendChild(lobby);
-  }
-
+  if (!lobby) { lobby = document.createElement('div'); lobby.id = 'lobby-screen'; lobby.className = 'screen'; container.appendChild(lobby); }
   const now = new Date();
   const today = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
   const dailyAvailable = G.dailyLastClaim !== today;
   const claimable = G.quests.filter(q => q.progress >= q.target && !q.claimed).length;
   const progressPct = Math.min(100, (G.unlockedLevel / 500) * 100);
-
   lobby.innerHTML = `
     <div class="crystal-bg" id="lobby-bg"></div>
     <div class="lobby-content">
-      <div class="title-wrap">
-        <div class="title-crystal">◆</div>
-        <h1 class="game-title">${t('title')}</h1>
-        <div class="title-crystal">◆</div>
-      </div>
-
+      <div class="title-wrap"><div class="title-crystal">◆</div><h1 class="game-title">${t('title')}</h1><div class="title-crystal">◆</div></div>
       <div class="stats-bar">
         <div class="stat-pill"><span class="stat-icon">👑</span><span class="stat-value">${t('level')} ${G.unlockedLevel}</span></div>
         <div class="stat-pill gold"><span class="stat-icon">💰</span><span class="stat-value">${G.coins}</span></div>
         <div class="stat-pill fire"><span class="stat-icon">🔥</span><span class="stat-value">${G.dailyStreak}/7</span></div>
       </div>
-
       <div class="progress-wrap">
         <div class="progress-label">${t('progress')}: ${G.unlockedLevel} / 500</div>
         <div class="progress-bar"><div class="progress-fill" style="width:${progressPct}%"></div></div>
       </div>
-
       <div class="lobby-actions">
-        <div class="play-main-btn" id="play-main-btn">
-          <div class="play-icon">${playSVG()}</div>
-          <div class="play-text">${t('play')}</div>
-        </div>
+        <div class="play-main-btn" id="play-main-btn"><div class="play-icon">${playSVG()}</div><div class="play-text">${t('play')}</div></div>
         <div class="lobby-grid" id="lobby-grid"></div>
       </div>
     </div>
   `;
-
   createFloatingCrystals(document.getElementById('lobby-bg'), 22);
-
-  document.getElementById('play-main-btn').onclick = () => {
-    playSfx('click'); buildScreen('levels'); showScreen('levels');
-  };
-
+  document.getElementById('play-main-btn').onclick = () => { playSfx('click'); buildScreen('levels'); showScreen('levels'); };
   const grid = document.getElementById('lobby-grid');
   const buttons = [
     { key:'settings', icon:settingsSVG(), screen:'settings', color:'linear-gradient(135deg,#2c3e50 0%,#3498db 100%)' },
@@ -1436,23 +1262,16 @@ function buildLobby() {
     { key:'shop', icon:shopSVG(), screen:'shop', color:'linear-gradient(135deg,#1abc9c 0%,#16a085 100%)' },
     { key:'invite', icon:inviteSVG(), screen:'invite', color:'linear-gradient(135deg,#f9d423 0%,#ff4e50 100%)' }
   ];
-
   buttons.forEach(btn => {
     const el = document.createElement('div');
-    el.className = 'lobby-btn';
-    el.style.background = btn.color;
-    el.innerHTML = `
-      <div class="lobby-icon">${btn.icon}</div>
-      <span class="lobby-label">${t(btn.key)}</span>
-      ${btn.badge ? `<div class="lobby-badge">${btn.badge}</div>` : ''}
-    `;
+    el.className = 'lobby-btn'; el.style.background = btn.color;
+    el.innerHTML = `<div class="lobby-icon">${btn.icon}</div><span class="lobby-label">${t(btn.key)}</span>${btn.badge ? `<div class="lobby-badge">${btn.badge}</div>` : ''}`;
     if (btn.key === 'invite') el.onclick = () => { playSfx('click'); showInviteBox(); };
     else el.onclick = () => { playSfx('click'); buildScreen(btn.screen); showScreen(btn.screen); };
     grid.appendChild(el);
   });
 }
 
-// ==================== SVG ICONS ====================
 function playSVG() { return `<svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>`; }
 function settingsSVG() { return `<svg viewBox="0 0 24 24" fill="white"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94 0 .31.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>`; }
 function questsSVG() { return `<svg viewBox="0 0 24 24" fill="white"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`; }
@@ -1466,23 +1285,16 @@ function colorSVG() { return `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r
 function shuffleSVG() { return `<svg viewBox="0 0 24 24" fill="#22dddd"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>`; }
 function hammerSVG() { return `<svg viewBox="0 0 24 24" fill="#ffaa22"><path d="M14.69 2.66L6.34 11l1.41 1.41 8.35-8.34-1.41-1.41zM2.66 14.69L11 6.34l1.41 1.41-8.34 8.35-1.41-1.41zM21.34 9.31L13 17.66l1.41 1.41 8.34-8.35-1.41-1.41z"/></svg>`; }
 
-// ==================== LEVELS ====================
 function buildLevels() {
   let screen = document.getElementById('levels-screen');
-  if (!screen) {
-    screen = document.createElement('div');
-    screen.id = 'levels-screen'; screen.className = 'screen';
-    document.getElementById('game-container').appendChild(screen);
-  }
+  if (!screen) { screen = document.createElement('div'); screen.id = 'levels-screen'; screen.className = 'screen'; document.getElementById('game-container').appendChild(screen); }
   screen.innerHTML = `
     <div class="crystal-bg" id="levels-bg"></div>
     <div style="width:95%;max-width:800px;display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;position:relative;z-index:2;padding-top:10px;">
       <button class="btn-back" onclick="playSfx('click');buildLobby();showScreen('lobby')">${t('back')}</button>
       <h2 style="color:#aaddff;font-size:22px;font-weight:900;text-shadow:0 0 12px rgba(100,180,255,.5);">${t('level')} ${G.unlockedLevel}</h2>
     </div>
-    <div class="level-grid-container" style="position:relative;z-index:2;">
-      <div class="level-grid" id="level-grid-el"></div>
-    </div>
+    <div class="level-grid-container" style="position:relative;z-index:2;"><div class="level-grid" id="level-grid-el"></div></div>
   `;
   createFloatingCrystals(document.getElementById('levels-bg'), 12);
   const grid = document.getElementById('level-grid-el');
@@ -1507,24 +1319,19 @@ function buildLevels() {
   }, 50);
 }
 
-// ==================== GAME ====================
 function buildGameScreen() {
   let screen = document.getElementById('game-screen');
-  if (!screen) {
-    screen = document.createElement('div');
-    screen.id = 'game-screen'; screen.className = 'screen';
-    document.getElementById('game-container').appendChild(screen);
-  }
+  if (!screen) { screen = document.createElement('div'); screen.id = 'game-screen'; screen.className = 'screen'; document.getElementById('game-container').appendChild(screen); }
 }
 
 function startLevel(level) {
   buildGameScreen();
   const screen = document.getElementById('game-screen');
-  // Адаптивный размер поля
+  // ===== Адаптивный размер поля (больше на ПК) =====
   const mobile = window.innerWidth < 768;
-  const boardMax = mobile ? Math.min(window.innerWidth - 24, 500) : Math.min(window.innerWidth - 120, 720);
-  const availH = window.innerHeight - (mobile ? 300 : 340);
-  const canvasSize = Math.max(260, Math.min(boardMax, availH));
+  const availH = window.innerHeight - (mobile ? 280 : 230);
+  const availW = window.innerWidth  - (mobile ? 20  : 80);
+  const canvasSize = Math.max(260, Math.min(availH, availW, 1000));
 
   screen.innerHTML = `
     <div class="crystal-bg" id="game-bg"></div>
@@ -1547,12 +1354,9 @@ function startLevel(level) {
     <canvas id="game-canvas" width="${canvasSize}" height="${canvasSize}" style="position:relative;z-index:2;"></canvas>
     <div class="power-up-bar" id="powerup-bar" style="position:relative;z-index:2;"></div>
   `;
-
   createFloatingCrystals(document.getElementById('game-bg'), 8);
-
   const canvas = document.getElementById('game-canvas');
   game = new Match3(canvas, level);
-
   const puBar = document.getElementById('powerup-bar');
   const pus = [
     { type:'bomb', svg:bombSVG(), desc:t('bombDesc') },
@@ -1567,18 +1371,15 @@ function startLevel(level) {
     el.innerHTML = pu.svg + `<div class="power-up-count">${G.powerups[pu.type]||0}</div>`;
     el.title = pu.desc;
     el.onclick = () => {
-      if (G.powerups[pu.type] > 0) {
-        game.powerupMode = game.powerupMode === pu.type ? null : pu.type;
-        playSfx('click');
-      } else showToast(t('notEnough'));
+      if (G.powerups[pu.type] > 0) { game.powerupMode = game.powerupMode === pu.type ? null : pu.type; playSfx('click'); }
+      else showToast(t('notEnough'));
     };
     puBar.appendChild(el);
   });
-
   showScreen('game');
 
-  // ===== Реклама ТОЛЬКО если игрок уже проходил 1-й уровень =====
-  if (G.unlockedLevel > 1) {
+  // ===== Реклама перед уровнем: только если пройдено минимум 3 уровня =====
+  if (G.unlockedLevel > 3) {
     game.paused = true;
     showToast(t('adLoading'), 1500);
     showInterstitialAd(() => { game.paused = false; });
@@ -1612,16 +1413,13 @@ function gameLoop(time) {
 }
 function stopGameLoop() { if (gameLoopId) { cancelAnimationFrame(gameLoopId); gameLoopId = null; } game = null; }
 
-// ==================== WIN/LOSE ====================
 function onLevelWin(level, score) {
   playSfx('win');
   G.stats.levelsCompleted++;
   const reward = 50 + level * 10;
   const stars = score >= getLevelTarget(level)*1.5 ? 3 : score >= getLevelTarget(level)*1.2 ? 2 : 1;
   if (level >= G.unlockedLevel) G.unlockedLevel = Math.min(level + 1, 500);
-  updateQuestProgress('win', 1);
-  updateQuestProgress('score', score);
-  updateQuestProgress('level', level);
+  updateQuestProgress('win', 1); updateQuestProgress('score', score); updateQuestProgress('level', level);
   saveData();
   setTimeout(() => {
     const screen = document.getElementById('game-screen');
@@ -1630,9 +1428,7 @@ function onLevelWin(level, score) {
     overlay.innerHTML = `
       <div class="overlay-content panel">
         <h2 style="color:#38ef7d;font-size:32px;margin-bottom:10px;text-shadow:0 0 20px rgba(56,239,125,.6);">${t('win')}</h2>
-        <div class="star-rating">
-          ${[0,1,2].map(i => `<svg class="star ${i<stars?'filled':''}" viewBox="0 0 24 24" fill="${i<stars?'#ffd700':'#444'}"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`).join('')}
-        </div>
+        <div class="star-rating">${[0,1,2].map(i => `<svg class="star ${i<stars?'filled':''}" viewBox="0 0 24 24" fill="${i<stars?'#ffd700':'#444'}"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`).join('')}</div>
         <p style="color:#ffd700;font-size:24px;margin:10px 0;font-weight:900;text-shadow:0 0 15px rgba(255,215,0,.6);">+${reward} ${t('coins')}</p>
         <div style="display:flex;gap:10px;justify-content:center;margin-top:15px;flex-wrap:wrap;">
           <button class="btn btn-warning" id="double-btn">▶ ${t('watchAd')} (+${reward} ${t('coins')})</button>
@@ -1683,14 +1479,9 @@ function onLevelLose() {
   }, 500);
 }
 
-// ==================== SETTINGS ====================
 function buildSettings() {
   let screen = document.getElementById('settings-screen');
-  if (!screen) {
-    screen = document.createElement('div');
-    screen.id = 'settings-screen'; screen.className = 'screen';
-    document.getElementById('game-container').appendChild(screen);
-  }
+  if (!screen) { screen = document.createElement('div'); screen.id = 'settings-screen'; screen.className = 'screen'; document.getElementById('game-container').appendChild(screen); }
   screen.innerHTML = `
     <div class="crystal-bg" id="settings-bg"></div>
     <div style="width:90%;max-width:520px;position:relative;z-index:2;padding:20px 0;">
@@ -1699,17 +1490,8 @@ function buildSettings() {
         <h2 style="color:#aaddff;font-size:24px;font-weight:900;text-shadow:0 0 12px rgba(100,180,255,.5);">${t('settings')}</h2>
       </div>
       <div class="panel">
-        <div class="settings-row">
-          <span class="settings-label">${t('music')}</span>
-          <div class="toggle-switch ${G.musicOn?'on':''}" id="music-toggle"><div class="knob"></div></div>
-        </div>
-        <div class="settings-row">
-          <span class="settings-label">${t('language')}</span>
-          <div style="display:flex;gap:8px;">
-            <button class="lang-btn ${G.lang==='ru'?'active':''}" data-lang="ru">Русский</button>
-            <button class="lang-btn ${G.lang==='en'?'active':''}" data-lang="en">English</button>
-          </div>
-        </div>
+        <div class="settings-row"><span class="settings-label">${t('music')}</span><div class="toggle-switch ${G.musicOn?'on':''}" id="music-toggle"><div class="knob"></div></div></div>
+        <div class="settings-row"><span class="settings-label">${t('language')}</span><div style="display:flex;gap:8px;"><button class="lang-btn ${G.lang==='ru'?'active':''}" data-lang="ru">Русский</button><button class="lang-btn ${G.lang==='en'?'active':''}" data-lang="en">English</button></div></div>
         <div class="settings-row" style="flex-direction:column;align-items:stretch;">
           <span class="settings-label" style="margin-bottom:8px;">${t('promo')}</span>
           <input type="text" class="promo-input" id="promo-input" placeholder="${t('enterPromo')}">
@@ -1720,39 +1502,19 @@ function buildSettings() {
   `;
   createFloatingCrystals(document.getElementById('settings-bg'), 10);
   document.getElementById('music-toggle').onclick = (e) => { toggleMusic(); e.currentTarget.classList.toggle('on'); };
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.onclick = () => { G.lang = b.dataset.lang; saveData(); buildSettings(); };
-  });
+  document.querySelectorAll('.lang-btn').forEach(b => { b.onclick = () => { G.lang = b.dataset.lang; saveData(); buildSettings(); }; });
   document.getElementById('promo-apply').onclick = () => {
     const code = document.getElementById('promo-input').value.trim().toLowerCase();
     if (code === 'clear12') {
       if (confirm(t('clearConfirm'))) {
-        // Полный сброс: tutorialDone = false — чтобы окно обучения снова появилось
-        G = {
-          lang: G.lang,
-          coins: 100,
-          currentLevel: 1,
-          unlockedLevel: 1,
-          musicOn: G.musicOn,
-          tutorialDone: false,
-          powerups: { bomb:0, line:0, color:0, shuffle:0, hammer:0 },
-          dailyLastClaim: null,
-          dailyStreak: 0,
-          afkAccumulated: 0,
-          afkLastVisit: Date.now(),
-          quests: [],
-          questsDate: null,
-          stats: { totalMatches:0, levelsCompleted:0, totalCoins:0 }
-        };
+        G = { lang:G.lang, coins:100, currentLevel:1, unlockedLevel:1, musicOn:G.musicOn, tutorialDone:false,
+          powerups:{bomb:0,line:0,color:0,shuffle:0,hammer:0}, dailyLastClaim:null, dailyStreak:0,
+          afkAccumulated:0, afkLastVisit:Date.now(), quests:[], questsDate:null,
+          stats:{totalMatches:0, levelsCompleted:0, totalCoins:0} };
         saveData();
         showToast(t('promoSuccess'), 1800);
         stopGameLoop();
-        // Возвращаемся в лобби и показываем окно обучения
-        setTimeout(() => {
-          buildLobby();
-          showScreen('lobby');
-          setTimeout(showTutorialPrompt, 700);
-        }, 900);
+        setTimeout(() => { buildLobby(); showScreen('lobby'); setTimeout(showTutorialPrompt, 700); }, 900);
       }
     } else if (code === 'admin17') {
       G.coins += 100000; saveData(); showToast(`+100000 ${t('coins')}!`); buildSettings();
@@ -1760,7 +1522,6 @@ function buildSettings() {
   };
 }
 
-// ==================== QUESTS ====================
 const QUEST_TEMPLATES = [
   { id:'win3', desc:{ru:'Выиграйте 3 уровня', en:'Win 3 levels'}, target:3, type:'win', reward:100 },
   { id:'win5', desc:{ru:'Выиграйте 5 уровней', en:'Win 5 levels'}, target:5, type:'win', reward:200 },
@@ -1773,10 +1534,7 @@ const QUEST_TEMPLATES = [
   { id:'winStreak', desc:{ru:'Выиграйте 3 уровня подряд', en:'Win 3 levels in a row'}, target:3, type:'winStreak', reward:250 },
   { id:'matches500', desc:{ru:'Соберите 500 кристаллов', en:'Match 500 crystals'}, target:500, type:'matches', reward:400 }
 ];
-function getQuestsDate() {
-  const d = new Date();
-  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
-}
+function getQuestsDate() { const d = new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
 function generateQuests() {
   const today = getQuestsDate();
   if (G.questsDate !== today || !G.quests.length) {
@@ -1801,21 +1559,14 @@ function updateQuestProgress(type, value) {
 function buildQuests() {
   generateQuests();
   let screen = document.getElementById('quests-screen');
-  if (!screen) {
-    screen = document.createElement('div');
-    screen.id = 'quests-screen'; screen.className = 'screen';
-    document.getElementById('game-container').appendChild(screen);
-  }
+  if (!screen) { screen = document.createElement('div'); screen.id = 'quests-screen'; screen.className = 'screen'; document.getElementById('game-container').appendChild(screen); }
   const now = new Date();
   const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
   const hoursLeft = Math.floor((tomorrow - now) / 3600000);
   const minsLeft = Math.floor(((tomorrow - now) % 3600000) / 60000);
   let questsHtml = G.quests.map((q,i) => `
     <div class="quest-card">
-      <div class="quest-info">
-        <div class="quest-title">${q.desc[G.lang]}</div>
-        <div class="quest-progress">${q.progress}/${q.target}</div>
-      </div>
+      <div class="quest-info"><div class="quest-title">${q.desc[G.lang]}</div><div class="quest-progress">${q.progress}/${q.target}</div></div>
       <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
         <div class="quest-reward"><svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffd700"/></svg>${q.reward}</div>
         <button class="quest-claim-btn" ${q.progress>=q.target&&!q.claimed?'':'disabled'} data-idx="${i}">${q.claimed?t('claimed'):t('claimReward')}</button>
@@ -1823,14 +1574,15 @@ function buildQuests() {
     </div>
   `).join('');
   const allDone = G.quests.every(q => q.claimed);
+  // Полноэкранный flex-контейнер: шапка + подсказка + flex:1 скролл
   screen.innerHTML = `
     <div class="crystal-bg" id="quests-bg"></div>
-    <div style="width:90%;max-width:640px;position:relative;z-index:2;padding:20px 0;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <div style="width:90%;max-width:640px;height:100%;display:flex;flex-direction:column;position:relative;z-index:2;padding:15px 0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-shrink:0;">
         <button class="btn-back" onclick="playSfx('click');buildLobby();showScreen('lobby')">${t('back')}</button>
         <h2 style="color:#aaddff;font-size:24px;font-weight:900;text-shadow:0 0 12px rgba(100,180,255,.5);">${t('quests')}</h2>
       </div>
-      <div style="text-align:center;color:#8899bb;margin-bottom:15px;font-size:13px;font-weight:600;">
+      <div style="text-align:center;color:#8899bb;margin-bottom:10px;font-size:13px;font-weight:600;flex-shrink:0;">
         ${allDone ? t('noQuests') : `${t('questRefresh')} ${hoursLeft}${t('hours')} ${minsLeft}${t('min')}`}
       </div>
       <div class="quest-scroll-wrap">${questsHtml}</div>
@@ -1852,22 +1604,16 @@ function buildQuests() {
   });
 }
 
-// ==================== AFK ====================
 let afkTimerId = null, afkAccumulator = 0;
 function buildAfk() {
   let screen = document.getElementById('afk-screen');
-  if (!screen) {
-    screen = document.createElement('div');
-    screen.id = 'afk-screen'; screen.className = 'screen';
-    document.getElementById('game-container').appendChild(screen);
-  }
+  if (!screen) { screen = document.createElement('div'); screen.id = 'afk-screen'; screen.className = 'screen'; document.getElementById('game-container').appendChild(screen); }
   const earnPerMin = 5 + Math.floor(G.unlockedLevel/10);
   const earnPerSec = earnPerMin / 60;
   if (afkTimerId) { clearInterval(afkTimerId); afkTimerId = null; }
   afkAccumulator = 0;
   function updateAfkDisplay() {
-    const coinEl = document.getElementById('afk-coins');
-    const btnEl = document.getElementById('afk-collect');
+    const coinEl = document.getElementById('afk-coins'); const btnEl = document.getElementById('afk-collect');
     if (coinEl) coinEl.textContent = Math.floor(afkAccumulator);
     if (btnEl) { btnEl.textContent = `${t('collect')} ${Math.floor(afkAccumulator)}`; btnEl.disabled = afkAccumulator < 1; }
   }
@@ -1882,13 +1628,7 @@ function buildAfk() {
       <div class="panel">
         <div class="afk-coin">
           <svg width="90" height="90" viewBox="0 0 80 80">
-            <defs>
-              <radialGradient id="goldGrad" cx="30%" cy="30%">
-                <stop offset="0%" stop-color="#fff3a0"/>
-                <stop offset="50%" stop-color="#ffd700"/>
-                <stop offset="100%" stop-color="#b8860b"/>
-              </radialGradient>
-            </defs>
+            <defs><radialGradient id="goldGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#fff3a0"/><stop offset="50%" stop-color="#ffd700"/><stop offset="100%" stop-color="#b8860b"/></radialGradient></defs>
             <circle cx="40" cy="40" r="35" fill="url(#goldGrad)" stroke="#daa520" stroke-width="3"/>
             <text x="40" y="52" text-anchor="middle" font-size="30" font-weight="bold" fill="#b8860b" opacity="0.7">$</text>
           </svg>
@@ -1907,13 +1647,8 @@ function buildAfk() {
   document.getElementById('afk-back').onclick = () => {
     playSfx('click');
     if (afkTimerId) { clearInterval(afkTimerId); afkTimerId = null; }
-    if (afkAccumulator >= 1) {
-      G.coins += Math.floor(afkAccumulator);
-      G.afkAccumulated = Math.floor(afkAccumulator);
-      saveData();
-    }
-    afkAccumulator = 0;
-    buildLobby(); showScreen('lobby');
+    if (afkAccumulator >= 1) { G.coins += Math.floor(afkAccumulator); G.afkAccumulated = Math.floor(afkAccumulator); saveData(); }
+    afkAccumulator = 0; buildLobby(); showScreen('lobby');
   };
   document.getElementById('afk-collect').onclick = () => {
     const amount = Math.floor(afkAccumulator);
@@ -1925,14 +1660,9 @@ function buildAfk() {
   };
 }
 
-// ==================== DAILY ====================
 function buildDaily() {
   let screen = document.getElementById('daily-screen');
-  if (!screen) {
-    screen = document.createElement('div');
-    screen.id = 'daily-screen'; screen.className = 'screen';
-    document.getElementById('game-container').appendChild(screen);
-  }
+  if (!screen) { screen = document.createElement('div'); screen.id = 'daily-screen'; screen.className = 'screen'; document.getElementById('game-container').appendChild(screen); }
   const today = getQuestsDate();
   const canClaim = G.dailyLastClaim !== today;
   const rewards = [50, 100, 150, 200, 300, 500, 1000];
@@ -1976,7 +1706,6 @@ function claimDaily(day, reward) {
   buildDaily();
 }
 
-// ==================== SHOP ====================
 const SHOP_ITEMS = [
   { type:'bomb', name:{ru:'Бомба',en:'Bomb'}, desc:'bombDesc', price:300, svg:'bomb' },
   { type:'line', name:{ru:'Линия',en:'Line'}, desc:'lineDesc', price:200, svg:'line' },
@@ -1989,11 +1718,7 @@ const SHOP_ITEMS = [
 ];
 function buildShop() {
   let screen = document.getElementById('shop-screen');
-  if (!screen) {
-    screen = document.createElement('div');
-    screen.id = 'shop-screen'; screen.className = 'screen';
-    document.getElementById('game-container').appendChild(screen);
-  }
+  if (!screen) { screen = document.createElement('div'); screen.id = 'shop-screen'; screen.className = 'screen'; document.getElementById('game-container').appendChild(screen); }
   let itemsHtml = SHOP_ITEMS.map(item => {
     let svg = '';
     if (item.svg==='bomb') svg = bombSVG();
@@ -2015,10 +1740,11 @@ function buildShop() {
       </div>
     `;
   }).join('');
+  // Полноэкранный flex-контейнер: шапка + flex:1 скролл
   screen.innerHTML = `
     <div class="crystal-bg" id="shop-bg"></div>
-    <div style="width:95%;max-width:800px;display:flex;flex-direction:column;align-items:center;position:relative;z-index:2;padding:20px 0;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;width:100%;">
+    <div style="width:95%;max-width:820px;height:100%;display:flex;flex-direction:column;position:relative;z-index:2;padding:15px 0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;width:100%;flex-shrink:0;">
         <button class="btn-back" onclick="playSfx('click');buildLobby();showScreen('lobby')">${t('back')}</button>
         <h2 style="color:#aaddff;font-size:24px;font-weight:900;text-shadow:0 0 12px rgba(100,180,255,.5);">${t('shop')}</h2>
         <div class="stat-pill gold"><svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffd700"/></svg><span class="stat-value">${G.coins}</span></div>
@@ -2046,7 +1772,6 @@ function buildShop() {
   });
 }
 
-// ==================== TUTORIAL ====================
 function showTutorialPrompt() {
   const existing = document.getElementById('tutorial-prompt');
   if (existing) existing.remove();
@@ -2083,17 +1808,12 @@ function startTutorial() {
       el.style.top = steps[step].top;
       el.innerHTML = steps[step].text + (step < steps.length-1 ? '<br><button class="btn btn-primary" style="margin-top:10px;padding:8px 20px;font-size:14px;">Далее →</button>' : '<br><button class="btn btn-success" style="margin-top:10px;padding:8px 20px;font-size:14px;">✓ Понятно</button>');
       screen.appendChild(el);
-      el.querySelector('button').onclick = () => {
-        step++;
-        if (step < steps.length) showStep();
-        else el.remove();
-      };
+      el.querySelector('button').onclick = () => { step++; if (step < steps.length) showStep(); else el.remove(); };
     }
     showStep();
   }, 1000);
 }
 
-// ==================== DISPATCHER ====================
 function buildScreen(name) {
   switch(name) {
     case 'levels': buildLevels(); break;
@@ -2105,20 +1825,17 @@ function buildScreen(name) {
   }
 }
 
-// ==================== TOAST ====================
 let toastTimer = null;
 function showToast(msg, duration=2000) {
   const old = document.querySelector('.toast');
   if (old) old.remove();
   const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = msg;
+  toast.className = 'toast'; toast.textContent = msg;
   document.body.appendChild(toast);
   if (toastTimer) clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.remove(), duration);
 }
 
-// ==================== INPUT ====================
 function setupInput() {
   document.addEventListener('click', () => { initAudio(); if (G.musicOn) playMusic(); }, { once: true });
   document.addEventListener('touchstart', () => { initAudio(); if (G.musicOn) playMusic(); }, { once: true });
@@ -2170,13 +1887,12 @@ function setupInput() {
   }, { passive: false });
 }
 
-// ==================== INIT ====================
 async function init() {
   await loadData();
   generateQuests();
   buildLobby();
   showScreen('lobby');
-  showBanner();
+  showBanner();           // показать один раз и забыть
   setupInput();
   if (!G.tutorialDone) setTimeout(showTutorialPrompt, 500);
 }
