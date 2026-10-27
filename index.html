@@ -389,8 +389,6 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 .afk-info { text-align:center; margin:20px 0; }
 .afk-coin { width:90px; height:90px; margin:0 auto 16px; animation: floatUp 2s infinite; filter: drop-shadow(0 0 20px rgba(255,215,0,.5)); }
 
-#banner-container { position:fixed; bottom:0; left:0; width:100%; height:65px; z-index:100; display:none; justify-content:center; align-items:center; background:rgba(0,0,0,.3); }
-
 .toast {
   position:fixed; top:20px; left:50%; transform:translateX(-50%);
   background: linear-gradient(135deg, rgba(40,40,80,.97), rgba(25,25,55,.97));
@@ -501,7 +499,6 @@ html,body { width:100%; height:100%; overflow:hidden; background:#0a0a1a; font-f
 </head>
 <body>
 <div id="game-container"></div>
-<div id="banner-container"></div>
 
 <script>
 // ==================== VK BRIDGE ====================
@@ -729,8 +726,6 @@ function showBanner() {
   if (!vkAvailable) return;
   try {
     vkBridge.send("VKWebAppShowBannerAd", { banner_width:'320', banner_height:'65' }).then(()=>{
-      const bc = document.getElementById('banner-container');
-      if (bc) { bc.style.display='flex'; bc.style.height='65px'; }
       bannerShown = true;
     }).catch(()=>{});
   } catch(e){}
@@ -739,7 +734,6 @@ function hideBanner() {
   // Kept for compatibility, but NOT called anywhere — banner always stays on.
   if (vkAvailable && bannerShown) {
     try { vkBridge.send("VKWebAppHideBannerAd"); } catch(e){}
-    document.getElementById('banner-container').style.display='none'; bannerShown = false;
   }
 }
 
